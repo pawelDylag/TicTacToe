@@ -10,11 +10,12 @@ import android.view.View;
 import com.fais.tictactoe.R;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * This activity holds main game view
  */
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,17 +25,7 @@ public class GameActivity extends AppCompatActivity {
         // bind this view
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
 }

@@ -24,7 +24,7 @@ public class BaseActivity extends Activity {
         super.onCreate(savedInstanceState);
         this.getAppComponent().inject(this);
     }
-    
+
     /**
      * Get the Main Application component for dependency injection
      */
