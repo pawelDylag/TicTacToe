@@ -2,7 +2,6 @@ package com.fais.tictactoe.di;
 
 import android.app.Application;
 
-import com.fais.tictactoe.DaggerAppComponent;
 
 /**
  * Created by paweldylag on 18/10/15.

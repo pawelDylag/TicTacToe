@@ -18,6 +18,4 @@ public abstract class Player {
         return playerType;
     }
 
-    // zwraca ruch uzytkownika
-    public abstract Point getMove();
 }
