@@ -5,6 +5,10 @@ package com.fais.tictactoe.interfaces;
  */
 public interface BoardManager {
 
+    // to ma zarzadzac plansza
+    // proponuje zrobic osobny model Boardu w ktorym bedzie implementacja samej planszy
+    // np. int[][] board
+
     // true - wtedy kiedy sie uda zapisac,
     // false kiedy sie nie uda
     boolean insertAtCoordinates(int x, int y, int playerType);
