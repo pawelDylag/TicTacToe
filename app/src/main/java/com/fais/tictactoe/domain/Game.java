@@ -1,14 +1,18 @@
 package com.fais.tictactoe.domain;
 
+import android.graphics.Point;
+
 import com.fais.tictactoe.data.Player;
-import com.fais.tictactoe.presentation.InputProvider;
-import com.fais.tictactoe.presentation.OutputProvider;
+
+import com.fais.tictactoe.interfaces.OutputProvider;
+
+import com.fais.tictactoe.interfaces.GameEngine;
 
 
 /**
  * Created by paweldylag on 20/10/15.
  */
-public class Game  {
+public class Game{
 
     private GameEngine gameEngine;
     private BoardManager boardManager;
@@ -19,18 +23,28 @@ public class Game  {
 
     private int boardSize;
 
-    private InputProvider inputProvider;
     private OutputProvider outputProvider;
 
-    public Game(Player firstPlayer, Player secondPlayer, int boardSize, InputProvider inputProvider, OutputProvider outputProvider) {
+    public Game(Player firstPlayer, Player secondPlayer, int boardSize, OutputProvider outputProvider) {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.boardSize = boardSize;
-        this.inputProvider = inputProvider;
         this.outputProvider = outputProvider;
     }
 
     public void start() {
-        //gameEngine.startGame()
+        gameEngine.startGame();
+    }
+
+    public void onBoardClick(Point point) {
+        gameEngine.onBoardClick(point);
+    }
+
+    public void onExitGame() {
+        gameEngine.onExitGame();
+    }
+
+    public void onPause() {
+        gameEngine.onPause();
     }
 }

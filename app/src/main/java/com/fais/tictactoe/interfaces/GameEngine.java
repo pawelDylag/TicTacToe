@@ -1,5 +1,7 @@
 package com.fais.tictactoe.interfaces;
 
+import android.graphics.Point;
+
 /**
  * Created by paweldylag on 20/10/15.
  */
@@ -14,9 +16,6 @@ public interface GameEngine {
     // zwraca numer tury
     int getCurrentTurnNumber();
 
-    // uruchomienie petli do kolejnej tury
-    void nextTurn();
-
     // sprawdzenie, czy ruch jest poprawny
     boolean checkMove(int x, int y, int playerType);
 
@@ -25,5 +24,14 @@ public interface GameEngine {
 
     // ustawia kto zaczyna pierwszy
     int setInitialPlayer();
+
+    // asynchroniczne wydarzenie - kiedy user kliknie plansze
+    void onBoardClick(Point point);
+
+    // asynchroniczne wydarzenie - kiedy user wyjdzie z gry
+    void onExitGame();
+
+    // asynchroniczne wydarzenie - kiedy user/system zastopuje gre
+    void onPause();
 
 }
