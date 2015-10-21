@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
@@ -26,13 +25,6 @@ dependencies {
 
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
-
-    // Dagger 2 and Compiler
-    compile 'com.google.dagger:dagger:2.0.1'
-    apt "com.google.dagger:dagger-compiler:2.0.1"
-
-    // Needed for @Generated annotation (missing in Java <= 1.6; therefore, Android)
-    compile 'javax.annotation:jsr250-api:1.0'
 
     // ButterKnife for view injections
     compile 'com.jakewharton:butterknife:7.0.1'
