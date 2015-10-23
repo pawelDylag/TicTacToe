@@ -5,10 +5,14 @@ package com.fais.tictactoe.interfaces;
  */
 public interface OutputProvider {
 
+
+
     void drawOnBoard(int x, int y, int resource);
 
     void displayMessage(String message);
 
     void displayDialog(String title, String message);
+
+
 
 }

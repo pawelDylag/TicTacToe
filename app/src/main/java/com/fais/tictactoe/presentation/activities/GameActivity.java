@@ -20,7 +20,6 @@ public class GameActivity extends BaseActivity {
         // bind this view
         ButterKnife.bind(this);
 
-
     }
 
 }
