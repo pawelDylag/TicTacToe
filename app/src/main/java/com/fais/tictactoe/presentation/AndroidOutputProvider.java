@@ -8,11 +8,13 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.fais.tictactoe.R;
+import com.fais.tictactoe.Util;
 import com.fais.tictactoe.interfaces.OutputProvider;
 
 /**
@@ -149,19 +151,9 @@ public class AndroidOutputProvider implements OutputProvider{
         }
 
         public void drawOnBoard(int x, int y, int resource) {
-            boardThumbnails[convert2DIndexTo1D(x,y)] = resource;
+            boardThumbnails[Util.convert2DIndexTo1D(x, y, boardSize)] = resource;
         }
     }
 
-    protected int convert2DIndexTo1D(int x, int y) {
-        return y * boardSize + x;
-    }
 
-    protected Point convert1DIndexTo2D(int index) {
-        Point point = new Point();
-        int x = (int) Math.floor(((double) index / boardSize));
-        int y = index % boardSize;
-        point.set(x, y);
-        return point;
-    }
 }
