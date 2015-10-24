@@ -1,6 +1,6 @@
 package com.fais.tictactoe.domain;
 
-import com.fais.tictactoe.data.Player;
+import com.fais.tictactoe.Data.Player;
 
 /**
  * Created by paweldylag on 20/10/15.
