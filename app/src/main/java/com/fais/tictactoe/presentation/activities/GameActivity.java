@@ -28,8 +28,6 @@ public class GameActivity extends BaseActivity {
         setContentView(R.layout.activity_game);
         // bind this view
         ButterKnife.bind(this);
-        //
-        AndroidOutputProvider outputProvider = new AndroidOutputProvider(gridView, coordinatorLayout, 6, this);
 
     }
 
