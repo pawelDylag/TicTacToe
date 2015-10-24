@@ -1,7 +1,10 @@
 package com.fais.tictactoe.presentation;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +24,7 @@ public class AndroidOutputProvider implements OutputProvider{
     /**
      * Board size in DP for screen
      */
-    private static final int BOARD_SIZE_DP = 80;
+    private static final int BOARD_CELL_SIZE_DP = 80;
 
     /**
      * Board size in DP for screen
@@ -32,6 +35,11 @@ public class AndroidOutputProvider implements OutputProvider{
      * Board view object
      */
     private GridView boardView;
+
+    /**
+     * Coordinator layout for displaying messages on screen
+     */
+    private CoordinatorLayout coordinatorLayout;
 
     /**
      * Current activity context
@@ -48,13 +56,15 @@ public class AndroidOutputProvider implements OutputProvider{
      */
     private BoardAdapter boardAdapter;
 
-
-    public AndroidOutputProvider(GridView boardView, int boardSize, Context context) {
+    public AndroidOutputProvider(GridView boardView, CoordinatorLayout coordinatorLayout, int boardSize, Context context) {
         this.boardView = boardView;
         this.context = context;
         this.boardSize = boardSize;
+        this.coordinatorLayout = coordinatorLayout;
         this.boardAdapter = new BoardAdapter(boardSize, context);
         boardView.setAdapter(boardAdapter);
+        boardView.setNumColumns(boardSize);
+        boardView.setColumnWidth(BOARD_CELL_SIZE_DP);
     }
 
     @Override
@@ -73,31 +83,34 @@ public class AndroidOutputProvider implements OutputProvider{
 
     @Override
     public void displayMessage(String message) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void displayDialog(String title, String message) {
-
+        AlertDialog dialog = new AlertDialog.Builder(context).setMessage(message).setTitle(title).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
     }
 
-    private void initBoard() {
-    }
-
+    /**
+     * Adapter for GridView
+     */
     private class BoardAdapter extends BaseAdapter {
 
-        private int boardSize;
-        private int boardThumnnails[];
+        private int boardThumbnails[];
         private Context context;
 
         public BoardAdapter(int boardSize, Context context) {
-            this.boardSize = boardSize;
             this.context = context;
             this.initBoardThumbnails(boardSize);
         }
 
         @Override
         public int getCount() {
-            return boardThumnnails.length;
+            return boardThumbnails.length;
         }
 
         @Override
@@ -116,32 +129,32 @@ public class AndroidOutputProvider implements OutputProvider{
             if (convertView == null) {
                 // if it's not recycled, initialize some attributes
                 imageView = new ImageView(context);
-                imageView.setLayoutParams(new GridView.LayoutParams(BOARD_SIZE_DP, BOARD_SIZE_DP));
+                imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(BOARD_CELL_PADDING, BOARD_CELL_PADDING, BOARD_CELL_PADDING, BOARD_CELL_PADDING);
             } else {
                 imageView = (ImageView) convertView;
             }
             imageView.setTag(position);
-            imageView.setImageResource(boardThumnnails[position]);
+            imageView.setImageResource(boardThumbnails[position]);
             return imageView;
         }
 
         private void initBoardThumbnails(int boardSize) {
-            boardThumnnails = new int[boardSize * boardSize];
+            boardThumbnails = new int[boardSize * boardSize];
             for (int i = 0; i < boardSize * boardSize ; i++) {
                 // init board with blank fields
-                boardThumnnails[i] = R.drawable.board_blank_thumbnail;
+                boardThumbnails[i] = R.drawable.board_blank_thumbnail;
             }
         }
 
         public void drawOnBoard(int x, int y, int resource) {
-            boardThumnnails[convert2DIndexTo1D(x,y)] = resource;
+            boardThumbnails[convert2DIndexTo1D(x,y)] = resource;
         }
     }
 
     protected int convert2DIndexTo1D(int x, int y) {
-        return x * boardSize + y;
+        return y * boardSize + x;
     }
 
     protected Point convert1DIndexTo2D(int index) {

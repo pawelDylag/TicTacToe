@@ -1,12 +1,15 @@
 package com.fais.tictactoe.domain;
 
+import android.content.Context;
 import android.graphics.Point;
+import android.widget.GridView;
 
 import com.fais.tictactoe.data.Player;
 
 import com.fais.tictactoe.interfaces.OutputProvider;
 
 import com.fais.tictactoe.interfaces.GameEngine;
+import com.fais.tictactoe.presentation.AndroidOutputProvider;
 
 
 /**
@@ -18,18 +21,13 @@ public class Game{
     private BoardManager boardManager;
     private PlayerManager playerManager;
 
-    private Player firstPlayer;
-    private Player secondPlayer;
-
     private int boardSize;
 
     private OutputProvider outputProvider;
 
-    public Game(Player firstPlayer, Player secondPlayer, int boardSize, OutputProvider outputProvider) {
-        this.firstPlayer = firstPlayer;
-        this.secondPlayer = secondPlayer;
+    public Game(Context context, GridView gridView, Player firstPlayer, Player secondPlayer, int boardSize) {
         this.boardSize = boardSize;
-        this.outputProvider = outputProvider;
+        this.playerManager = new PlayerManager(firstPlayer, secondPlayer);
     }
 
     public void start() {

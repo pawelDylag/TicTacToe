@@ -6,6 +6,6 @@
         android:height="40dp"
         />
     <solid
-        android:color="@color/colorCellBackground"
+        android:color="@color/colorPrimary"
         />
 </shape>
