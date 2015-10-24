@@ -2,7 +2,7 @@ package com.fais.tictactoe.domain;
 
 import android.graphics.Point;
 
-import com.fais.tictactoe.data.Player;
+import com.fais.tictactoe.Data.Player;
 
 import com.fais.tictactoe.interfaces.OutputProvider;
 
