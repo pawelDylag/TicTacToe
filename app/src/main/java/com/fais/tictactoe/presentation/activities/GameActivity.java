@@ -45,7 +45,7 @@ public class GameActivity extends Activity {
         ButterKnife.bind(this);
         // setup toolbar
         // TODO: dodac imiona graczy
-        initToolbar("Test", "Test2");
+        initToolbar();
         // init game with starting params
         initGame(getIntent());
         // set input listeners
@@ -66,11 +66,11 @@ public class GameActivity extends Activity {
         game.setOutputProvider(outputProvider);
     }
 
-    private void initToolbar(String firstPlayerName, String secondPlayerName) {
+    private void initToolbar() {
         setActionBar(toolbar);
         if (getActionBar() != null) {
             // add title
-            getActionBar().setTitle(firstPlayerName + " vs " + secondPlayerName);
+            getActionBar().setTitle(getResources().getString(R.string.title_activity_game));
             // add back button
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setDisplayShowHomeEnabled(true);
@@ -80,7 +80,7 @@ public class GameActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.home:
+            case android.R.id.home:
                 onBackPressed();
                 break;
         }

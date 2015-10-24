@@ -92,7 +92,6 @@ public class MenuActivity extends Activity {
             difficultyLayout.setVisibility(View.INVISIBLE);
             startButton.setClickable(true);
         }else {
-            startButton.setClickable(false);
             aiCheckbox.setChecked(true);
             difficultyLayout.setVisibility(View.VISIBLE);
         }
@@ -100,9 +99,9 @@ public class MenuActivity extends Activity {
     @OnCheckedChanged(R.id.opponent_checkbox_ai)
     public void onAIChecked(boolean checked){
         if(checked){
-            startButton.setClickable(false);
             humanCheckbox.setChecked(false);
             difficultyLayout.setVisibility(View.VISIBLE);
+            difficultySpinner.setSelection(0);
         }else {
             humanCheckbox.setChecked(true);
             startButton.setClickable(true);

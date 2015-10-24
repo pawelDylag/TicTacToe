@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TicTacToe</string>
     <string name="title_activity_menu">Yet another TicTacToe</string>
-    <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_game">Yet another TicTacToe</string>
     <string name="choose_size">Choose size of the board</string>
     <string name="choose_opponent">Choose your opponent</string>
     <string name="choose_difficulty">Choose difficulty level</string>
