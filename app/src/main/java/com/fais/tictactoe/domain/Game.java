@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.widget.GridView;
 
-import com.fais.tictactoe.data.Player;
+import com.fais.tictactoe.Data.Player;
 
 import com.fais.tictactoe.interfaces.OutputProvider;
 
