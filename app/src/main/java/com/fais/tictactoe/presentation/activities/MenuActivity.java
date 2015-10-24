@@ -62,7 +62,7 @@ public class MenuActivity extends Activity {
 
         sizePicker.setValue(3);
         sizePicker.setMinValue(2);
-        sizePicker.setMaxValue(100);
+        sizePicker.setMaxValue(10);
 
 
     }

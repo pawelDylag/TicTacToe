@@ -22,6 +22,9 @@
             android:name=".presentation.activities.GameActivity"
             android:label="@string/title_activity_game"
             android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fais.tictactoe.presentation.activities.MenuActivity" />
         </activity>
     </application>
 

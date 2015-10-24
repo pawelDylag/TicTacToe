@@ -6,8 +6,12 @@ import android.content.DialogInterface;
 import android.graphics.Point;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.GridLayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -16,6 +20,7 @@ import android.widget.ImageView;
 import com.fais.tictactoe.R;
 import com.fais.tictactoe.Util;
 import com.fais.tictactoe.interfaces.OutputProvider;
+import com.fais.tictactoe.presentation.widgets.BoardItemView;
 
 /**
  * This class manages output for android
@@ -31,7 +36,7 @@ public class AndroidOutputProvider implements OutputProvider{
     /**
      * Board size in DP for screen
      */
-    private static final int BOARD_CELL_PADDING = 8;
+    private static final int BOARD_CELL_PADDING = 5;
 
     /**
      * Board view object
@@ -64,9 +69,52 @@ public class AndroidOutputProvider implements OutputProvider{
         this.boardSize = boardSize;
         this.coordinatorLayout = coordinatorLayout;
         this.boardAdapter = new BoardAdapter(boardSize, context);
+        initBoardView();
+    }
+
+    private void initBoardView() {
+        // set adapter for grid view
         boardView.setAdapter(boardAdapter);
+        // set grid view params
         boardView.setNumColumns(boardSize);
         boardView.setColumnWidth(BOARD_CELL_SIZE_DP);
+        // initial animation
+        Animation cellAnimation = AnimationUtils.loadAnimation(context, R.anim.board_cell_appear);
+        GridLayoutAnimationController animController = new GridLayoutAnimationController(cellAnimation);
+        animController.setDirectionPriority(GridLayoutAnimationController.PRIORITY_NONE);
+        animController.setColumnDelay(0.6f / boardSize);
+        animController.setRowDelay(0.6f / boardSize);
+        boardView.setLayoutAnimation(animController);
+    }
+
+    /**
+     * Displays winer combination as a sweet animation!
+     * @param winnerPoints
+     */
+    public void displayWinnerCells (Point[] winnerPoints) {
+        if (winnerPoints == null || winnerPoints.length > boardSize * boardSize) {
+            throw new IllegalArgumentException("Too many winner points.");
+        }
+        // run through all items
+        for (int i = 0; i < boardSize * boardSize; i++) {
+            // flag if current point is winning point
+            boolean flag = false;
+            // check all wining points
+            for (int j = 0; j < winnerPoints.length; j++) {
+                if (winnerPoints[j] == null) {
+                    throw new NullPointerException("Winner points must not be null");
+                }
+                int winningPointIndex = Util.convert2DIndexTo1D(winnerPoints[j].x, winnerPoints[j].y, boardSize);
+                if (i == winningPointIndex) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                BoardItemView item = (BoardItemView) boardView.getChildAt(i);
+                Animation cellAnimation = AnimationUtils.loadAnimation(context, R.anim.board_cell_downsize);
+                item.setAnimation(cellAnimation);
+            }
+        }
     }
 
     @Override
@@ -127,15 +175,15 @@ public class AndroidOutputProvider implements OutputProvider{
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView imageView;
+            BoardItemView imageView;
             if (convertView == null) {
                 // if it's not recycled, initialize some attributes
-                imageView = new ImageView(context);
+                imageView = new BoardItemView(context);
                 imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(BOARD_CELL_PADDING, BOARD_CELL_PADDING, BOARD_CELL_PADDING, BOARD_CELL_PADDING);
             } else {
-                imageView = (ImageView) convertView;
+                imageView = (BoardItemView) convertView;
             }
             imageView.setTag(position);
             imageView.setImageResource(boardThumbnails[position]);

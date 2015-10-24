@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toolbar;
 
 
 import com.fais.tictactoe.Data.Parameters;
@@ -26,7 +28,12 @@ public class GameActivity extends Activity {
     CoordinatorLayout coordinatorLayout;
     @Bind(R.id.activity_game_grid_view)
     GridView gridView;
+    @Bind(R.id.activity_game_toolbar)
+    Toolbar toolbar;
 
+    /**
+     * Main game object
+     */
     private Game game;
 
     @Override
@@ -36,6 +43,9 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
         // bind this view
         ButterKnife.bind(this);
+        // setup toolbar
+        // TODO: dodac imiona graczy
+        initToolbar("Test", "Test2");
         // init game with starting params
         initGame(getIntent());
         // set input listeners
@@ -56,6 +66,24 @@ public class GameActivity extends Activity {
         game.setOutputProvider(outputProvider);
     }
 
+    private void initToolbar(String firstPlayerName, String secondPlayerName) {
+        setActionBar(toolbar);
+        if (getActionBar() != null) {
+            // add title
+            getActionBar().setTitle(firstPlayerName + " vs " + secondPlayerName);
+            // add back button
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
