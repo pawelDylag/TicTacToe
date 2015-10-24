@@ -1,4 +1,4 @@
-package com.fais.tictactoe.data;
+package com.fais.tictactoe.Data;
 
 /**
  * Created by paweldylag on 24/10/15.
