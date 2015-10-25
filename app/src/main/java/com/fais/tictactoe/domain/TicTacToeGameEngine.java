@@ -2,14 +2,27 @@ package com.fais.tictactoe.domain;
 
 import android.graphics.Point;
 
+import com.fais.tictactoe.interfaces.BoardManager;
+import com.fais.tictactoe.interfaces.PlayerManager;
+
 /**
  * Created by paweldylag on 20/10/15.
  */
 public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEngine {
 
+    private PlayerManager playerManager;
+    private BoardManager boardManager;
+    private int turnNumber;
+    private boolean isGameStarted;
+
+    public TicTacToeGameEngine(PlayerManager playerManager, BoardManager boardManager) {
+        this.playerManager = playerManager;
+        this.boardManager = boardManager;
+    }
+
     @Override
     public void startGame() {
-
+        isGameStarted = true;
     }
 
     @Override
@@ -50,6 +63,10 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
 
     @Override
     public void onPause() {
+
+    }
+
+    private void mainGameLoop() {
 
     }
 }

@@ -20,16 +20,14 @@ public class TicTacToeGame {
     private GameEngine gameEngine;
     private BoardManager boardManager;
     private PlayerManager playerManager;
-
     private int boardSize;
-
     private OutputProvider outputProvider;
 
     public TicTacToeGame(int firstPlayer, int secondPlayer, int boardSize) {
         this.boardSize = boardSize;
-        this.gameEngine = new TicTacToeGameEngine();
         this.boardManager = new TicTacToeBoardManager();
         setPlayers(firstPlayer, secondPlayer);
+        this.gameEngine = new TicTacToeGameEngine(playerManager, boardManager);
     }
 
     public void setOutputProvider(OutputProvider outputProvider) {
