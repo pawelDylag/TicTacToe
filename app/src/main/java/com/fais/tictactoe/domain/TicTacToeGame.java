@@ -2,6 +2,7 @@ package com.fais.tictactoe.domain;
 
 import android.graphics.Point;
 
+import com.fais.tictactoe.Data.Parameters;
 import com.fais.tictactoe.Data.PlayerFactory;
 import com.fais.tictactoe.R;
 import com.fais.tictactoe.interfaces.BoardManager;
@@ -38,6 +39,8 @@ public class TicTacToeGame {
         PlayerFactory playerFactory = new PlayerFactory();
         this.playerManager = new TicTacToePlayerManager(playerFactory.getPlayer(firstPlayer),
                                                     playerFactory.getPlayer(secondPlayer));
+        this.playerManager.passBoardManager(this.boardManager);
+        this.playerManager.passPlayerManager();
     }
 
     public void start() {

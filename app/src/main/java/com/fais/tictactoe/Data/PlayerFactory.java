@@ -2,34 +2,41 @@ package com.fais.tictactoe.Data;
 
 import android.support.annotation.Nullable;
 
+import com.fais.tictactoe.domain.TicTacToeAIPlayerEasy;
+import com.fais.tictactoe.domain.TicTacToeAIPlayerHard;
+import com.fais.tictactoe.domain.TicTacToeHumanPlayer;
+
 /**
  * Created by paweldylag on 25/10/15.
  */
-public class PlayerFactory {
+public class PlayerFactory
+{
+    private Player player;
 
-
-    public PlayerFactory() {
+    public PlayerFactory()
+    {
     }
 
     @Nullable
-    public Player getPlayer(int playerType){
-        switch(playerType) {
+    public Player getPlayer(int playerType)
+    {
+        switch(playerType)
+        {
             case Parameters.PLAYER_HUMAN:
-                // TODO
+                player = new TicTacToeHumanPlayer();
+                player.setPlayerType(playerType);
                 break;
             case Parameters.PLAYER_AI_EASY:
-                // TODO
-                break;
-            case Parameters.PLAYER_AI_MEDIUM:
-                // TODO
+                player = new TicTacToeAIPlayerEasy();
+                player.setPlayerType(playerType);
                 break;
             case Parameters.PLAYER_AI_HARD:
-                // TODO
+                player = new TicTacToeAIPlayerHard();
+                player.setPlayerType(playerType);
                 break;
             default:
                 return null;
         }
-        // TODO: usunac
-        return null;
+        return player;
     }
 }
