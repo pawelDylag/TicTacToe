@@ -14,8 +14,6 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toolbar;
-
-import com.appyvet.rangebar.RangeBar;
 import com.fais.tictactoe.Data.Parameters;
 import com.fais.tictactoe.R;
 
