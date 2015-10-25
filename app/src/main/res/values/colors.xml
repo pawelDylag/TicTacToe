@@ -4,8 +4,6 @@
     <color name="colorPrimaryDark">#e53935</color>
     <color name="colorAccent">#673ab7</color>
     <color name="colorCellBackground">#d1d1d1</color>
-    <color name="background_material_light">#fafafa</color>
-    <color name="primary_material_light">#cddc39</color>
-    <color name="primary_dark_material_light">#c0ca33</color>
-    <color name="accent_material_light">#6200ea</color>
+    <color name="colorFirstPlayer">#673ab7</color>
+    <color name="colorSecondPlayer">#8BC34A</color>
 </resources>

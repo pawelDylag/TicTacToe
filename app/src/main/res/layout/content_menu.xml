@@ -28,15 +28,25 @@
             android:text="@string/choose_size"
             android:textAlignment="center" />
 
-        <NumberPicker
-            android:id="@+id/table_size_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/textView"
-            android:layout_margin="@dimen/spinners_margin"
-            android:layout_centerHorizontal="true">
+        <TextView
+            android:id="@+id/boardSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_below="@id/textView"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_titles"
+            android:textAlignment="center" />
 
-        </NumberPicker>
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/boardSize"
+            android:progress="1"
+            android:max="8"
+            />
+
     </RelativeLayout>
 
     <RelativeLayout

@@ -28,4 +28,7 @@ dependencies {
 
     // ButterKnife for view injections
     compile 'com.jakewharton:butterknife:7.0.1'
+
+    // custom slider widget
+    compile 'com.appyvet:materialrangebar:1.1'
 }

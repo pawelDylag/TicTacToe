@@ -9,11 +9,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.appyvet.rangebar.RangeBar;
 import com.fais.tictactoe.Data.Parameters;
 import com.fais.tictactoe.R;
 
@@ -27,8 +29,10 @@ import butterknife.OnItemSelected;
 
 public class MenuActivity extends Activity {
 
-    @Bind(R.id.table_size_picker)
-    NumberPicker sizePicker;
+    @Bind(R.id.seekbar)
+    SeekBar sizePicker;
+    @Bind(R.id.boardSize)
+    TextView boardSizeTextView;
     @Bind(R.id.opponent_checkbox_human)
     CheckBox humanCheckbox;
     @Bind(R.id.opponent_checkbox_ai)
@@ -43,6 +47,7 @@ public class MenuActivity extends Activity {
     Toolbar toolbar;
 
     private int difficultyPosition = -1;
+    private int boardSize = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +56,16 @@ public class MenuActivity extends Activity {
         setContentView(R.layout.activity_menu);
         // bind this view
         ButterKnife.bind(this);
-
+        // setup Toolbar
         setActionBar(toolbar);
         if (getActionBar() != null) {
             getActionBar().setTitle(R.string.title_activity_menu);
         }
-
+        // set initial values for checkboxes
         humanCheckbox.setChecked(true);
         aiCheckbox.setChecked(false);
-
-        sizePicker.setValue(3);
-        sizePicker.setMinValue(2);
-        sizePicker.setMaxValue(10);
-
-
+        // setup  board size picker
+        initSizePicker();
     }
 
     @Override
@@ -76,9 +77,6 @@ public class MenuActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         // All clicks on menu items needs to be here
@@ -121,7 +119,7 @@ public class MenuActivity extends Activity {
     public void onClick(View view){
         Intent intent = new Intent(getApplicationContext(), GameActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt(Parameters.INTENT_BOARD_SIZE, sizePicker.getValue());
+        bundle.putInt(Parameters.INTENT_BOARD_SIZE, boardSize);
         bundle.putInt(Parameters.INTENT_PLAYER_TYPE, getSelectedPlayerType());
         intent.putExtras(bundle);
         startActivity(intent);
@@ -151,6 +149,28 @@ public class MenuActivity extends Activity {
             result = Parameters.PLAYER_HUMAN;
         }
         return result;
+    }
+
+    private void initSizePicker() {
+        boardSizeTextView.setText(boardSize + " x " + boardSize);
+        sizePicker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // add minimal size
+                boardSize = 2 + progress;
+                boardSizeTextView.setText(boardSize + " x " + boardSize);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
 

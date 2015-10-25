@@ -6,6 +6,6 @@
         android:height="40dp"
         />
     <solid
-        android:color="@color/colorAccent"
+        android:color="@color/colorSecondPlayer"
         />
 </shape>

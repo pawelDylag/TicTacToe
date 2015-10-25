@@ -15,7 +15,7 @@ import com.fais.tictactoe.interfaces.GameEngine;
 /**
  * Created by paweldylag on 20/10/15.
  */
-public class Game{
+public class TicTacToeGame {
 
     private GameEngine gameEngine;
     private BoardManager boardManager;
@@ -25,7 +25,7 @@ public class Game{
 
     private OutputProvider outputProvider;
 
-    public Game(int firstPlayer, int secondPlayer, int boardSize) {
+    public TicTacToeGame(int firstPlayer, int secondPlayer, int boardSize) {
         this.boardSize = boardSize;
         this.gameEngine = new TicTacToeGameEngine();
         this.boardManager = new TicTacToeBoardManager();

@@ -13,7 +13,7 @@ import android.widget.Toolbar;
 
 import com.fais.tictactoe.Data.Parameters;
 import com.fais.tictactoe.R;
-import com.fais.tictactoe.domain.Game;
+import com.fais.tictactoe.domain.TicTacToeGame;
 import com.fais.tictactoe.presentation.AndroidOutputProvider;
 
 import butterknife.Bind;
@@ -34,7 +34,7 @@ public class GameActivity extends Activity {
     /**
      * Main game object
      */
-    private Game game;
+    private TicTacToeGame ticTacToeGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class GameActivity extends Activity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                game.onBoardClick(position);
+                ticTacToeGame.onBoardClick(position);
             }
         });
     }
@@ -60,18 +60,18 @@ public class GameActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (game == null) {
+        if (ticTacToeGame == null) {
             throw new NullPointerException("Game object must be initialized first.");
         }
-        game.start();
+        ticTacToeGame.start();
     }
 
     public void initGame(Intent intent) {
         int boardSize = intent.getExtras().getInt(Parameters.INTENT_BOARD_SIZE);
         AndroidOutputProvider outputProvider = new AndroidOutputProvider(gridView, coordinatorLayout, boardSize, this);
         int secondPlayerType = intent.getIntExtra(Parameters.INTENT_PLAYER_TYPE, Parameters.PLAYER_HUMAN);
-        game = new Game(Parameters.PLAYER_HUMAN, secondPlayerType, boardSize);
-        game.setOutputProvider(outputProvider);
+        ticTacToeGame = new TicTacToeGame(Parameters.PLAYER_HUMAN, secondPlayerType, boardSize);
+        ticTacToeGame.setOutputProvider(outputProvider);
     }
 
     private void initToolbar() {

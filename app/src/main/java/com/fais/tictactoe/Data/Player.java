@@ -15,4 +15,6 @@ public abstract class Player {
     public int getPlayerType() {
         return playerType;
     }
+
+
 }
