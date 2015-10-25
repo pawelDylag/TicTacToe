@@ -42,12 +42,15 @@ public class Game{
     }
 
     public void onBoardClick(int position) {
-        // tutaj wywolac funkcje na game engine, zeby sprawdzil czy ruch jest poprawny
-        //gameEngine.onBoardClick(position);
-
-        // TODO: Tymczasowo pokazuje samo klikniecie, usunac jak podepniemy gameEngine
+        // convert click position from 1d to 2d
         Point point = Util.convert1DIndexTo2D(position, boardSize);
-        outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_1_thumbnail);
+        // check if move is possible
+        boolean isMovePossible = gameEngine.onBoardClick(point);
+        if (isMovePossible) {
+            // draw on board
+            // TODO: PRZEKAZYWAC IKONE AKTUALNEGO GRACZA DO NARYSOWANIA
+            outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_1_thumbnail);
+        }
     }
 
 

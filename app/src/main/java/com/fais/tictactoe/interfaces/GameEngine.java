@@ -26,7 +26,7 @@ public interface GameEngine {
     int setInitialPlayer();
 
     // asynchroniczne wydarzenie - kiedy user kliknie plansze
-    void onBoardClick(Point point);
+    boolean onBoardClick(Point point);
 
     // asynchroniczne wydarzenie - kiedy user wyjdzie z gry
     void onExitGame();

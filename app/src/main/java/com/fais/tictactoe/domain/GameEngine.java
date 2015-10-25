@@ -38,8 +38,9 @@ public class GameEngine implements com.fais.tictactoe.interfaces.GameEngine {
     }
 
     @Override
-    public void onBoardClick(Point point) {
-
+    public boolean onBoardClick(Point point) {
+        // zaimplementowac
+        return true;
     }
 
     @Override
