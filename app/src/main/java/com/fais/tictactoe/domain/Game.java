@@ -1,15 +1,12 @@
 package com.fais.tictactoe.domain;
 
-import android.content.Context;
 import android.graphics.Point;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 
-import com.fais.tictactoe.Data.Player;
-
+import com.fais.tictactoe.Data.PlayerFactory;
 import com.fais.tictactoe.R;
-import com.fais.tictactoe.Util;
+import com.fais.tictactoe.interfaces.BoardManager;
+import com.fais.tictactoe.interfaces.PlayerManager;
+import com.fais.tictactoe.utilities.Util;
 import com.fais.tictactoe.interfaces.OutputProvider;
 
 import com.fais.tictactoe.interfaces.GameEngine;
@@ -28,13 +25,21 @@ public class Game{
 
     private OutputProvider outputProvider;
 
-    public Game(Player firstPlayer, Player secondPlayer, int boardSize) {
+    public Game(int firstPlayer, int secondPlayer, int boardSize) {
         this.boardSize = boardSize;
-        this.playerManager = new PlayerManager(firstPlayer, secondPlayer);
+        this.gameEngine = new TicTacToeGameEngine();
+        this.boardManager = new TicTacToeBoardManager();
+        setPlayers(firstPlayer, secondPlayer);
     }
 
     public void setOutputProvider(OutputProvider outputProvider) {
         this.outputProvider = outputProvider;
+    }
+
+    public void setPlayers(int firstPlayer, int secondPlayer) {
+        PlayerFactory playerFactory = new PlayerFactory();
+        this.playerManager = new TicTacToePlayerManager(playerFactory.getPlayer(firstPlayer),
+                                                    playerFactory.getPlayer(secondPlayer));
     }
 
     public void start() {

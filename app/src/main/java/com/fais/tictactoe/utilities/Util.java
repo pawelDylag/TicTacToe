@@ -1,4 +1,4 @@
-package com.fais.tictactoe;
+package com.fais.tictactoe.utilities;
 
 import android.graphics.Point;
 

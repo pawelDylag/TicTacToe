@@ -7,24 +7,21 @@ import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.GridLayoutAnimationController;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.fais.tictactoe.R;
-import com.fais.tictactoe.Util;
+import com.fais.tictactoe.utilities.Util;
 import com.fais.tictactoe.interfaces.OutputProvider;
 import com.fais.tictactoe.presentation.widgets.BoardItemView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This class manages output for android

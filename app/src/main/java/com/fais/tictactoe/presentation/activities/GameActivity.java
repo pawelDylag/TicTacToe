@@ -55,14 +55,22 @@ public class GameActivity extends Activity {
                 game.onBoardClick(position);
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (game == null) {
+            throw new NullPointerException("Game object must be initialized first.");
+        }
+        game.start();
     }
 
     public void initGame(Intent intent) {
         int boardSize = intent.getExtras().getInt(Parameters.INTENT_BOARD_SIZE);
         AndroidOutputProvider outputProvider = new AndroidOutputProvider(gridView, coordinatorLayout, boardSize, this);
-        //TODO: Tutaj stworzyc playerow w zaleznosci od wyboru usera, i dodac ich do game. Aktualnie sa 'null'
-        game = new Game(null, null, boardSize);
+        int secondPlayerType = intent.getIntExtra(Parameters.INTENT_PLAYER_TYPE, Parameters.PLAYER_HUMAN);
+        game = new Game(Parameters.PLAYER_HUMAN, secondPlayerType, boardSize);
         game.setOutputProvider(outputProvider);
     }
 

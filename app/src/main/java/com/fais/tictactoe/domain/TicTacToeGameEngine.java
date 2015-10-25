@@ -5,7 +5,7 @@ import android.graphics.Point;
 /**
  * Created by paweldylag on 20/10/15.
  */
-public class GameEngine implements com.fais.tictactoe.interfaces.GameEngine {
+public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEngine {
 
     @Override
     public void startGame() {
