@@ -24,28 +24,27 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:textSize="@dimen/text_size_titles"
             android:text="@string/choose_size"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_titles" />
 
         <TextView
             android:id="@+id/boardSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:layout_below="@id/textView"
+            android:padding="5dp"
+            android:textAlignment="center"
             android:textColor="@color/colorAccent"
-            android:textSize="@dimen/text_size_titles"
-            android:textAlignment="center" />
+            android:textSize="@dimen/text_size_titles" />
 
         <SeekBar
             android:id="@+id/seekbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/boardSize"
-            android:progress="1"
             android:max="8"
-            />
+            android:progress="0" />
 
     </RelativeLayout>
 
@@ -58,47 +57,55 @@
             android:id="@+id/opponent_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/choose_opponent"
             android:textAlignment="center"
-            android:textSize="@dimen/text_size_titles"
-            android:gravity="center"
-            />
+            android:textSize="@dimen/text_size_titles" />
 
-        <CheckBox
-            android:id="@+id/opponent_checkbox_human"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spinners_margin"
-            android:layout_below="@id/opponent_text_view">
-        </CheckBox>
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/opponent_checkbox_human"
-            android:layout_toEndOf="@+id/opponent_checkbox_human"
-            android:text="@string/opponent_human"
-            android:layout_marginTop="@dimen/spinners_margin"
-            android:layout_marginBottom="@dimen/spinners_margin"
-            android:textAlignment="textStart"/>
-
-        <CheckBox
-            android:id="@+id/opponent_checkbox_ai"
-            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/spinners_margin"
-            android:layout_below="@id/opponent_checkbox_human">
+            android:layout_below="@id/opponent_text_view"
+            android:orientation="horizontal">
 
-        </CheckBox>
+            <CheckBox
+                android:id="@+id/opponent_checkbox_human"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spinners_margin"
+                android:layout_marginBottom="@dimen/spinners_margin"
+                android:layout_marginTop="@dimen/spinners_margin"
+                android:layout_weight="1" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spinners_margin"
-            android:layout_marginBottom="@dimen/spinners_margin"
-            android:text="@string/opponent_ai"
-            android:textAlignment="textStart"
-            android:layout_alignBottom="@+id/opponent_checkbox_ai"
-            android:layout_toEndOf="@+id/opponent_checkbox_ai" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spinners_margin"
+                android:layout_marginTop="@dimen/spinners_margin"
+                android:layout_weight="1"
+                android:text="@string/opponent_human"
+                android:textAlignment="textStart" />
+
+            <CheckBox
+                android:id="@+id/opponent_checkbox_ai"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spinners_margin"
+                android:layout_marginBottom="@dimen/spinners_margin"
+                android:layout_marginTop="@dimen/spinners_margin"
+                android:layout_weight="1">
+
+            </CheckBox>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spinners_margin"
+                android:layout_marginTop="@dimen/spinners_margin"
+                android:layout_weight="1"
+                android:text="@string/opponent_ai"
+                android:textAlignment="textStart" />
+        </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -112,28 +119,28 @@
             android:id="@+id/difficulty_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/choose_difficulty"
             android:textAlignment="center"
-            android:textSize="@dimen/text_size_titles"
-            android:text="@string/choose_difficulty" />
+            android:textSize="@dimen/text_size_titles" />
 
         <Spinner
             android:id="@+id/difficulty_spinner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/difficulty_text_view"
             android:layout_margin="@dimen/spinners_margin"
-            android:prompt="@string/choose_difficulty_spinner"
             android:entries="@array/difficulties"
-            android:layout_below="@+id/difficulty_text_view" />
+            android:prompt="@string/choose_difficulty_spinner" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/start_game_button"
         android:layout_width="match_parent"
-        android:text="@string/start_game_button"
         android:layout_height="0dp"
+        android:layout_gravity="bottom"
         android:layout_weight="0.15"
         android:clickable="false"
-        android:layout_gravity="bottom"/>
+        android:text="@string/start_game_button" />
 
 
 </LinearLayout>
