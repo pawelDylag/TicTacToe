@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -21,6 +22,9 @@ import com.fais.tictactoe.R;
 import com.fais.tictactoe.Util;
 import com.fais.tictactoe.interfaces.OutputProvider;
 import com.fais.tictactoe.presentation.widgets.BoardItemView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class manages output for android
@@ -91,8 +95,12 @@ public class AndroidOutputProvider implements OutputProvider{
      * Displays winer combination as a sweet animation!
      * @param winnerPoints
      */
-    public void displayWinnerCells (Point[] winnerPoints) {
-        if (winnerPoints == null || winnerPoints.length > boardSize * boardSize) {
+    @Override
+    public void displayWinnerCells (ArrayList<Point> winnerPoints) {
+        if (winnerPoints == null) {
+            throw new NullPointerException("Winner points list object must not be null");
+        }
+        if (winnerPoints.size() > boardSize * boardSize) {
             throw new IllegalArgumentException("Too many winner points.");
         }
         // run through all items
@@ -100,11 +108,11 @@ public class AndroidOutputProvider implements OutputProvider{
             // flag if current point is winning point
             boolean flag = false;
             // check all wining points
-            for (int j = 0; j < winnerPoints.length; j++) {
-                if (winnerPoints[j] == null) {
-                    throw new NullPointerException("Winner points must not be null");
+            for (int j = 0; j < winnerPoints.size(); j++) {
+                if (winnerPoints.get(j) == null) {
+                    throw new NullPointerException("Winner points in list must not be null");
                 }
-                int winningPointIndex = Util.convert2DIndexTo1D(winnerPoints[j].x, winnerPoints[j].y, boardSize);
+                int winningPointIndex = Util.convert2DIndexTo1D(winnerPoints.get(j).x, winnerPoints.get(j).y, boardSize);
                 if (i == winningPointIndex) {
                     flag = true;
                 }
@@ -127,6 +135,7 @@ public class AndroidOutputProvider implements OutputProvider{
         }
         if (boardView != null && boardAdapter != null) {
             boardAdapter.drawOnBoard(x, y, resource);
+            this.playSound(R.raw.draw_sound);
             boardAdapter.notifyDataSetChanged();
         }
     }
@@ -143,6 +152,23 @@ public class AndroidOutputProvider implements OutputProvider{
             public void onClick(DialogInterface dialog, int which) {
             }
         }).show();
+    }
+
+    /**
+     * Play sound from raw resources
+     * @param soundResource
+     */
+    private void playSound(int soundResource) {
+        MediaPlayer mp = MediaPlayer.create(context, soundResource);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // release reference to mediaPlayer object
+                mp.release();
+            }
+
+        });
+        mp.start();
     }
 
     /**
