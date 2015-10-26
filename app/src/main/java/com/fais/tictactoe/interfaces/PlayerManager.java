@@ -15,4 +15,8 @@ public interface PlayerManager
 
     // przekazuje referencje do siebie dla playerow
     void passPlayerManager ();
+
+    Player getFirstPlayer();
+
+    Player getSecondPlayer();
 }

@@ -23,18 +23,13 @@ public class TicTacToeGame {
     private PlayerManager playerManager;
     private int boardSize;
     private OutputProvider outputProvider;
-    private int firstPlayer;
-    private int secondPlayer;
 
     public TicTacToeGame(int firstPlayer, int secondPlayer, int boardSize, OutputProvider outputProvider) {
         this.boardSize = boardSize;
         this.boardManager = new TicTacToeBoardManager();
         this.boardManager.setBoardSize(boardSize);
-        setPlayers(firstPlayer, secondPlayer);
-        this.firstPlayer = firstPlayer;
-        this.secondPlayer = secondPlayer;
         this.outputProvider = outputProvider;
-
+        setPlayers(firstPlayer, secondPlayer);
         this.gameEngine = new TicTacToeGameEngine(playerManager, boardManager, outputProvider);
     }
 
@@ -60,7 +55,8 @@ public class TicTacToeGame {
         // convert click position from 1d to 2d
         Point point = Util.convert1DIndexTo2D(position, boardSize);
         // sets next player move
-        int playerMove = gameEngine.onBoardClick(point, firstPlayer, secondPlayer);
+        int playerMove = gameEngine.onBoardClick(point, playerManager.getFirstPlayer().getPlayerType(),
+                                                                    playerManager.getSecondPlayer().getPlayerType());
         // check player move
         if (playerMove == 0) {
             // draw on board
@@ -70,7 +66,6 @@ public class TicTacToeGame {
             outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_2_thumbnail);
         }
     }
-
 
     public void onExitGame() {
         gameEngine.onExitGame();

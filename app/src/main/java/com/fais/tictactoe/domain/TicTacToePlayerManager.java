@@ -59,4 +59,14 @@ public class TicTacToePlayerManager implements PlayerManager{
         firstPlayer.setPlayerManager(this);
         secondPlayer.setPlayerManager(this);
     }
+
+    @Override
+    public Player getFirstPlayer() {
+        return firstPlayer;
+    }
+
+    @Override
+    public Player getSecondPlayer() {
+        return secondPlayer;
+    }
 }
