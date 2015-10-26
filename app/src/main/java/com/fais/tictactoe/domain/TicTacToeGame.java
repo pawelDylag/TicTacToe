@@ -45,9 +45,9 @@ public class TicTacToeGame {
         gameEngine.startGame();
         playerManager.passBoardManager(boardManager);
         int startingPlayer = gameEngine.setInitialPlayer();
-        if(startingPlayer == 0)
+        if(startingPlayer == Parameters.FIRST_PLAYER)
             outputProvider.displayMessage("Player 1 turn");
-        else if (startingPlayer == 1)
+        else if (startingPlayer == Parameters.SECOND_PLAYER)
             outputProvider.displayMessage("Player 2 turn");
     }
 
@@ -58,11 +58,11 @@ public class TicTacToeGame {
         int playerMove = gameEngine.onBoardClick(point, playerManager.getFirstPlayer().getPlayerType(),
                                                                     playerManager.getSecondPlayer().getPlayerType());
         // check player move
-        if (playerMove == 0) {
+        if (playerMove == Parameters.FIRST_PLAYER) {
             // draw on board
             // TODO: PRZEKAZYWAC IKONE AKTUALNEGO GRACZA DO NARYSOWANIA
             outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_1_thumbnail);
-        } else if (playerMove == 1) {
+        } else if (playerMove == Parameters.SECOND_PLAYER) {
             outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_2_thumbnail);
         }
     }
