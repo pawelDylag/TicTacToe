@@ -16,6 +16,17 @@ public interface PlayerManager
     // przekazuje referencje do siebie dla playerow
     void passPlayerManager ();
 
+    // przekazuje info od GameEngine, czyja jest tura
+    void whoMoves(int playersMove);
+
+    // przekazuje do playera info, czy jest jego tura
+    boolean isMyTurn(int playerNr);
+
+    // przekazanie referencji do GameEngine
+    void passGameEngine(GameEngine gameEngine);
+
+    void AIMoves(int x, int y);
+
     Player getFirstPlayer();
 
     Player getSecondPlayer();

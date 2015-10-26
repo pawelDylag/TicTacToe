@@ -18,7 +18,8 @@ public class TicTacToeBoardManager implements BoardManager {
     }
 
     @Override
-    public int getAtCoordinates(int x, int y) {
+    public int getAtCoordinates(int x, int y)
+    {
         return board[x][y];
     }
 
@@ -26,10 +27,9 @@ public class TicTacToeBoardManager implements BoardManager {
     public void setBoardSize(int boardSize) {
         this.boardSize = boardSize;
         board = new int[boardSize][boardSize];
-        //nie dziala to ponizej dla dwuwymiarowej tablicy dlatego wracam do klasyki
-        //Arrays.fill(board, 0);
 
-        for (int i = 0; i < boardSize; i++) {
+        for (int i = 0; i < boardSize; i++)
+        {
             for (int j = 0; j < boardSize; j++)
                 board[i][j] = 0;
         }
@@ -42,8 +42,10 @@ public class TicTacToeBoardManager implements BoardManager {
 
     @Override
     public boolean isFull() {
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSize; j++)
+            {
                 if (board[i][j] == 0)
                     return false;
             }

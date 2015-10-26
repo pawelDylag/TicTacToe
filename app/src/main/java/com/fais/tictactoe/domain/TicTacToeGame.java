@@ -38,12 +38,12 @@ public class TicTacToeGame {
         PlayerFactory playerFactory = new PlayerFactory();
         this.playerManager = new TicTacToePlayerManager(playerFactory.getPlayer(firstPlayer),
                 playerFactory.getPlayer(secondPlayer));
-        this.playerManager.passBoardManager(this.boardManager);
         this.playerManager.passPlayerManager();
     }
 
     public void start() {
         gameEngine.startGame();
+        playerManager.passBoardManager(boardManager);
         int startingPlayer = gameEngine.setInitialPlayer();
         if(startingPlayer == 0)
             outputProvider.displayMessage("Player 1 turn");

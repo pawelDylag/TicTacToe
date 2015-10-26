@@ -10,6 +10,7 @@ public abstract class Player
 {
     protected String name;
     protected int playerType;
+    protected boolean isGameStarted = false;
     protected BoardManager boardManager;
     protected PlayerManager playerManager;
 
@@ -33,5 +34,13 @@ public abstract class Player
         this.boardManager = boardManager;
     }
 
-    public void setPlayerManager(PlayerManager playerManager){ this.playerManager = playerManager; }
+    public void setPlayerManager(PlayerManager playerManager)
+    {
+        this.playerManager = playerManager;
+    }
+
+    public void gameStarted()
+    {
+        isGameStarted = true;
+    }
 }

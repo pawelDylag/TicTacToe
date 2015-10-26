@@ -49,6 +49,12 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         return turnNumber;
     }
 
+    @Override
+    public boolean isGameFinished()
+    {
+        return isGameFinished;
+    }
+
     /**
      * Checks if clicked cell is occupied. If not it let player do his move.
      *
@@ -145,11 +151,18 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
     public int setInitialPlayer() {
         Random generator = new Random();
         int i = generator.nextInt(2);
-        if (i == 0) {
+        if (i == 0)
+        {
             playerOneTurn = true;
+            playerManager.whoMoves(1);
+            playerManager.passGameEngine(this);
             return 0;
-        } else if (i == 1) {
+        }
+        else if (i == 1)
+        {
             playerTwoTurn = true;
+            playerManager.whoMoves(2);
+            playerManager.passGameEngine(this);
             return 1;
         }
         return -1;
@@ -173,8 +186,10 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                     playerTwoTurn = true;
                     boardManager.insertAtCoordinates(point.x, point.y, firstPlayer);
                     isGameFinished = checkEndOfGame(point.x, point.y, firstPlayer);
-                    if (!isGameFinished)
+                    if (!isGameFinished) {
                         outputProvider.displayMessage("Player 2 turn!");
+                        playerManager.whoMoves(2);
+                    }
                     else if (boardManager.isFull()) {
                         outputProvider.displayMessage("Draw!");
                         return 0;
@@ -187,8 +202,10 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                     playerOneTurn = true;
                     boardManager.insertAtCoordinates(point.x, point.y, secondPlayer);
                     isGameFinished = checkEndOfGame(point.x, point.y, secondPlayer);
-                    if (!isGameFinished)
+                    if (!isGameFinished) {
                         outputProvider.displayMessage("Player 1 turn!");
+                        playerManager.whoMoves(1);
+                    }
                     else if (boardManager.isFull()) {
                         outputProvider.displayMessage("Draw!");
                         return 0;
