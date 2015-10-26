@@ -59,11 +59,9 @@ public class TicTacToeGame {
     public void onBoardClick(int position) {
         // convert click position from 1d to 2d
         Point point = Util.convert1DIndexTo2D(position, boardSize);
-
-
         // sets next player move
         int playerMove = gameEngine.onBoardClick(point, firstPlayer, secondPlayer);
-
+        // check player move
         if (playerMove == 0) {
             // draw on board
             // TODO: PRZEKAZYWAC IKONE AKTUALNEGO GRACZA DO NARYSOWANIA

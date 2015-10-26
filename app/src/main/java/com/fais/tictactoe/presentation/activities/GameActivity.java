@@ -44,7 +44,6 @@ public class GameActivity extends Activity {
         // bind this view
         ButterKnife.bind(this);
         // setup toolbar
-        // TODO: dodac imiona graczy
         initToolbar();
         // init game with starting params
         initGame(getIntent());
@@ -71,7 +70,6 @@ public class GameActivity extends Activity {
         AndroidOutputProvider outputProvider = new AndroidOutputProvider(gridView, coordinatorLayout, boardSize, this);
         int secondPlayerType = intent.getIntExtra(Parameters.INTENT_PLAYER_TYPE, Parameters.PLAYER_HUMAN_TWO);
         ticTacToeGame = new TicTacToeGame(Parameters.PLAYER_HUMAN, secondPlayerType, boardSize, outputProvider);
-        //ticTacToeGame.setOutputProvider(outputProvider);
     }
 
     private void initToolbar() {
