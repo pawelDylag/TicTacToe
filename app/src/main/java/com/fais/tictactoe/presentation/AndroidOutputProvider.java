@@ -100,6 +100,7 @@ public class AndroidOutputProvider implements OutputProvider{
         if (winnerPoints.size() > boardSize * boardSize) {
             throw new IllegalArgumentException("Too many winner points.");
         }
+        playSound(R.raw.win);
         // run through all items
         for (int i = 0; i < boardSize * boardSize; i++) {
             // flag if current point is winning point
@@ -115,7 +116,6 @@ public class AndroidOutputProvider implements OutputProvider{
                 }
             }
             if (!flag) {
-                playSound(R.raw.win);
                 BoardItemView item = (BoardItemView) boardView.getChildAt(i);
                 Animation cellAnimation = AnimationUtils.loadAnimation(context, R.anim.board_cell_downsize);
                 item.setAnimation(cellAnimation);

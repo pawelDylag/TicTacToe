@@ -49,20 +49,26 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         return turnNumber;
     }
 
-    /*
-    Checks if clicked cell is occupied. If not it let player do his move.
+    /**
+     * Checks if clicked cell is occupied. If not it let player do his move.
+     *
+     * @param x
+     * @param y
+     * @return
      */
     @Override
     public boolean checkMove(int x, int y) {
-        if (boardManager.getAtCoordinates(x, y) != 0)
-            return false;
-        else if (boardManager.getAtCoordinates(x, y) == 0)
-            return true;
-        else return false;
+        return (boardManager.getAtCoordinates(x, y) == 0);
     }
 
-    /*
-    Checks all game conditions (columns, raw, (anti)diagonals, draw)
+
+    /**
+     * Checks all game conditions (columns, raw, (anti)diagonals, draw)
+     *
+     * @param x
+     * @param y
+     * @param playerType
+     * @return
      */
     @Override
     public boolean checkEndOfGame(int x, int y, int playerType) {
@@ -125,14 +131,15 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         }
         //check draw
         if (boardManager.isFull()) {
-            outputProvider.displayMessage("Draw!");
             return true;
         }
         return false;
     }
 
-    /*
-    Sets first player
+    /**
+     * Sets first player
+     *
+     * @return
      */
     @Override
     public int setInitialPlayer() {
@@ -148,8 +155,13 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         return -1;
     }
 
-    /*
-    Return number defines what to draw on a board in TicTacToeGame class
+    /**
+     * Return number defines what to draw on a board in TicTacToeGame class
+     *
+     * @param point        Point clicked on board
+     * @param firstPlayer  id
+     * @param secondPlayer id
+     * @return
      */
     @Override
     public int onBoardClick(Point point, int firstPlayer, int secondPlayer) {
@@ -163,7 +175,10 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                     isGameFinished = checkEndOfGame(point.x, point.y, firstPlayer);
                     if (!isGameFinished)
                         outputProvider.displayMessage("Player 2 turn!");
-                    else
+                    else if (boardManager.isFull()) {
+                        outputProvider.displayMessage("Draw!");
+                        return 0;
+                    } else
                         outputProvider.displayMessage("Player 1 wins!");
 
                     return 0;
@@ -174,7 +189,10 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                     isGameFinished = checkEndOfGame(point.x, point.y, secondPlayer);
                     if (!isGameFinished)
                         outputProvider.displayMessage("Player 1 turn!");
-                    else
+                    else if (boardManager.isFull()) {
+                        outputProvider.displayMessage("Draw!");
+                        return 0;
+                    } else
                         outputProvider.displayMessage("Player 2 wins!");
 
                     return 1;
