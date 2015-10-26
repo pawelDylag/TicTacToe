@@ -6,10 +6,10 @@ package com.fais.tictactoe.interfaces;
 public interface BoardManager
 {
     // ustawia wielkość planszy
-    void setBoardsize(int boardsize);
+    void setBoardSize(int boardSize);
 
     // zwraca wielkosc planszy
-    int getBoardsize();
+    int getBoardSize();
 
     // true - wtedy kiedy sie uda zapisac,
     // false kiedy sie nie uda
@@ -17,5 +17,8 @@ public interface BoardManager
 
     // zwraca typ na danym polu
     int getAtCoordinates(int x, int y);
+
+    // sprawdza czy plansza jest zapelniona
+    boolean isFull();
 
 }

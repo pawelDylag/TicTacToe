@@ -12,7 +12,6 @@
 
     <string-array name="difficulties">
         <item>Easy</item>
-        <item>Medium</item>
         <item>Hard</item>
     </string-array>
 

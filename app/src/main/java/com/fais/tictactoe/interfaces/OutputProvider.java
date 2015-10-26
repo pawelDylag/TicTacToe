@@ -19,6 +19,4 @@ public interface OutputProvider {
 
     void displayWinnerCells(ArrayList<Point> winnerPoints);
 
-
-
 }

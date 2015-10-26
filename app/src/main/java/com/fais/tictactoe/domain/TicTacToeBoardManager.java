@@ -7,32 +7,47 @@ import java.util.Arrays;
 /**
  * Created by paweldylag on 20/10/15.
  */
-public class TicTacToeBoardManager implements BoardManager
-{
-    private int boardsize;
-    private int [][] board;
+public class TicTacToeBoardManager implements BoardManager {
+    private int boardSize;
+    private int[][] board;
 
     @Override
     public boolean insertAtCoordinates(int x, int y, int playerType) {
-        return false;
+        board[x][y] = playerType;
+        return true;
     }
 
     @Override
     public int getAtCoordinates(int x, int y) {
-        return 0;
+        return board[x][y];
     }
 
     @Override
-    public void setBoardsize(int boardsize)
-    {
-        this.boardsize = boardsize;
-        board = new int[boardsize][boardsize];
-        Arrays.fill(board, 0);
+    public void setBoardSize(int boardSize) {
+        this.boardSize = boardSize;
+        board = new int[boardSize][boardSize];
+        //nie dziala to ponizej dla dwuwymiarowej tablicy dlatego wracam do klasyki
+        //Arrays.fill(board, 0);
+
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++)
+                board[i][j] = 0;
+        }
     }
 
     @Override
-    public int getBoardsize()
-    {
-        return boardsize;
+    public int getBoardSize() {
+        return boardSize;
+    }
+
+    @Override
+    public boolean isFull() {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (board[i][j] == 0)
+                    return false;
+            }
+        }
+        return true;
     }
 }

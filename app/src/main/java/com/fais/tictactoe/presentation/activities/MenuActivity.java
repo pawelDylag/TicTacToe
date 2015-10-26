@@ -135,16 +135,13 @@ public class MenuActivity extends Activity {
                     result = Parameters.PLAYER_AI_EASY;
                     break;
                 case 1:
-                    result = Parameters.PLAYER_AI_MEDIUM;
-                    break;
-                case 2:
                     result = Parameters.PLAYER_AI_HARD;
                     break;
                 default:
-                    result = -1;
+                    result = Parameters.PLAYER_AI_EASY;
             }
         } else {
-            result = Parameters.PLAYER_HUMAN;
+            result = Parameters.PLAYER_HUMAN_TWO;
         }
         return result;
     }

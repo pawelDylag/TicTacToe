@@ -17,16 +17,16 @@ public interface GameEngine {
     int getCurrentTurnNumber();
 
     // sprawdzenie, czy ruch jest poprawny
-    boolean checkMove(int x, int y, int playerType);
+    boolean checkMove(int x, int y);
 
     // sprawdzenie warunkow wygranej
-    boolean checkEndOfGame();
+    boolean checkEndOfGame(int x, int y, int playerType);
 
     // ustawia kto zaczyna pierwszy
     int setInitialPlayer();
 
     // asynchroniczne wydarzenie - kiedy user kliknie plansze
-    boolean onBoardClick(Point point);
+    int onBoardClick(Point point, int firstPlayer, int secondPlayer);
 
     // asynchroniczne wydarzenie - kiedy user wyjdzie z gry
     void onExitGame();

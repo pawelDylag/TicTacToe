@@ -23,11 +23,16 @@ public class TicTacToeGame {
     private PlayerManager playerManager;
     private int boardSize;
     private OutputProvider outputProvider;
+    private int firstPlayer;
+    private int secondPlayer;
 
     public TicTacToeGame(int firstPlayer, int secondPlayer, int boardSize) {
         this.boardSize = boardSize;
         this.boardManager = new TicTacToeBoardManager();
+        this.boardManager.setBoardSize(boardSize);
         setPlayers(firstPlayer, secondPlayer);
+        this.firstPlayer = firstPlayer;
+        this.secondPlayer = secondPlayer;
         this.gameEngine = new TicTacToeGameEngine(playerManager, boardManager);
     }
 
@@ -38,24 +43,36 @@ public class TicTacToeGame {
     public void setPlayers(int firstPlayer, int secondPlayer) {
         PlayerFactory playerFactory = new PlayerFactory();
         this.playerManager = new TicTacToePlayerManager(playerFactory.getPlayer(firstPlayer),
-                                                    playerFactory.getPlayer(secondPlayer));
+                playerFactory.getPlayer(secondPlayer));
         this.playerManager.passBoardManager(this.boardManager);
         this.playerManager.passPlayerManager();
     }
 
     public void start() {
         gameEngine.startGame();
+        int startingPlayer = gameEngine.setInitialPlayer();
+        if(startingPlayer == 0)
+            outputProvider.displayMessage("Player 1 turn");
+        else if (startingPlayer == 1)
+            outputProvider.displayMessage("Player 2 turn");
     }
 
     public void onBoardClick(int position) {
         // convert click position from 1d to 2d
         Point point = Util.convert1DIndexTo2D(position, boardSize);
+
+
         // check if move is possible
-        boolean isMovePossible = gameEngine.onBoardClick(point);
-        if (isMovePossible) {
+        int isMovePossible = gameEngine.onBoardClick(point, firstPlayer, secondPlayer);
+
+        if (isMovePossible == 0) {
             // draw on board
             // TODO: PRZEKAZYWAC IKONE AKTUALNEGO GRACZA DO NARYSOWANIA
+            outputProvider.displayMessage("Player 2 turn");
             outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_1_thumbnail);
+        } else if (isMovePossible == 1) {
+            outputProvider.displayMessage("Player 1 turn");
+            outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_2_thumbnail);
         }
     }
 
