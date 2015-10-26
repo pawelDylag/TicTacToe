@@ -45,7 +45,7 @@ public class MenuActivity extends Activity {
     Toolbar toolbar;
 
     private int difficultyPosition = -1;
-    private int boardSize = 2;
+    private int boardSize = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +152,7 @@ public class MenuActivity extends Activity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // add minimal size
-                boardSize = 2 + progress;
+                boardSize = 3 + progress;
                 boardSizeTextView.setText(boardSize + " x " + boardSize);
             }
 

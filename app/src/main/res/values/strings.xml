@@ -9,6 +9,11 @@
     <string name="opponent_human">Human</string>
     <string name="opponent_ai">AI</string>
     <string name="start_game_button">Start game!</string>
+    <string name="playerOneTurn">Player 1 turn</string>
+    <string name="playerTwoTurn">Player 2 turn</string>
+    <string name="playerOneWin">Player 1 wins!</string>
+    <string name="playerTwoWin">Player 2 wins!</string>
+    <string name="draw">Draw!</string>
 
     <string-array name="difficulties">
         <item>Easy</item>

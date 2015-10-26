@@ -26,6 +26,10 @@ public class PlayerFactory
                 player = new TicTacToeHumanPlayer();
                 player.setPlayerType(playerType);
                 break;
+            case Parameters.PLAYER_HUMAN_TWO:
+                player = new TicTacToeHumanPlayer();
+                player.setPlayerType(playerType);
+                break;
             case Parameters.PLAYER_AI_EASY:
                 player = new TicTacToeAIPlayerEasy();
                 player.setPlayerType(playerType);

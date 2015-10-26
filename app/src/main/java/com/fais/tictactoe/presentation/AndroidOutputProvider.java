@@ -115,6 +115,7 @@ public class AndroidOutputProvider implements OutputProvider{
                 }
             }
             if (!flag) {
+                playSound(R.raw.win);
                 BoardItemView item = (BoardItemView) boardView.getChildAt(i);
                 Animation cellAnimation = AnimationUtils.loadAnimation(context, R.anim.board_cell_downsize);
                 item.setAnimation(cellAnimation);
@@ -141,6 +142,7 @@ public class AndroidOutputProvider implements OutputProvider{
     public void displayMessage(String message) {
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
+
 
     @Override
     public void displayDialog(String title, String message) {

@@ -69,9 +69,9 @@ public class GameActivity extends Activity {
     public void initGame(Intent intent) {
         int boardSize = intent.getExtras().getInt(Parameters.INTENT_BOARD_SIZE);
         AndroidOutputProvider outputProvider = new AndroidOutputProvider(gridView, coordinatorLayout, boardSize, this);
-        int secondPlayerType = intent.getIntExtra(Parameters.INTENT_PLAYER_TYPE, Parameters.PLAYER_HUMAN);
-        ticTacToeGame = new TicTacToeGame(Parameters.PLAYER_HUMAN, secondPlayerType, boardSize);
-        ticTacToeGame.setOutputProvider(outputProvider);
+        int secondPlayerType = intent.getIntExtra(Parameters.INTENT_PLAYER_TYPE, Parameters.PLAYER_HUMAN_TWO);
+        ticTacToeGame = new TicTacToeGame(Parameters.PLAYER_HUMAN, secondPlayerType, boardSize, outputProvider);
+        //ticTacToeGame.setOutputProvider(outputProvider);
     }
 
     private void initToolbar() {

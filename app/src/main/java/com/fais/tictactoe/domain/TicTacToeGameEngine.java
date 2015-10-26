@@ -1,11 +1,16 @@
 package com.fais.tictactoe.domain;
 
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.util.Log;
 
+import com.fais.tictactoe.R;
 import com.fais.tictactoe.interfaces.BoardManager;
+import com.fais.tictactoe.interfaces.OutputProvider;
 import com.fais.tictactoe.interfaces.PlayerManager;
+import com.fais.tictactoe.presentation.AndroidOutputProvider;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -15,25 +20,28 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
 
     private PlayerManager playerManager;
     private BoardManager boardManager;
+    private OutputProvider outputProvider;
+    private ArrayList<Point> winnerList = new ArrayList<>();
+    private Point point;
     private int turnNumber = 0;
-    private boolean isGameStarted;
+    private boolean isGameFinished;
     private boolean playerOneTurn = false;
     private boolean playerTwoTurn = false;
 
-    public TicTacToeGameEngine(PlayerManager playerManager, BoardManager boardManager) {
+    public TicTacToeGameEngine(PlayerManager playerManager, BoardManager boardManager, OutputProvider outputProvider) {
         this.playerManager = playerManager;
         this.boardManager = boardManager;
+        this.outputProvider = outputProvider;
     }
 
     @Override
     public void startGame() {
-        isGameStarted = true;
-        //mainGameLoop();
+        isGameFinished = false;
     }
 
     @Override
     public void stopGame() {
-
+        isGameFinished = true;
     }
 
     @Override
@@ -41,6 +49,9 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         return turnNumber;
     }
 
+    /*
+    Checks if clicked cell is occupied. If not it let player do his move.
+     */
     @Override
     public boolean checkMove(int x, int y) {
         if (boardManager.getAtCoordinates(x, y) != 0)
@@ -50,6 +61,9 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         else return false;
     }
 
+    /*
+    Checks all game conditions (columns, raw, (anti)diagonals, draw)
+     */
     @Override
     public boolean checkEndOfGame(int x, int y, int playerType) {
         int n = boardManager.getBoardSize();
@@ -58,20 +72,27 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             if (boardManager.getAtCoordinates(x, i) != playerType)
                 break;
             if (i == n - 1) {
-                Log.i("winner column", String.valueOf(playerType));
+                for (int j = 0; j < n; j++) {
+                    point = new Point(x, j);
+                    winnerList.add(point);
+                }
+                outputProvider.displayWinnerCells(winnerList);
+                return true;
             }
         }
-
         //check row
         for (int i = 0; i < n; i++) {
             if (boardManager.getAtCoordinates(i, y) != playerType)
                 break;
             if (i == n - 1) {
-                Log.i("winner row", String.valueOf(playerType));
-
+                for (int j = 0; j < n; j++) {
+                    point = new Point(j, y);
+                    winnerList.add(point);
+                }
+                outputProvider.displayWinnerCells(winnerList);
+                return true;
             }
         }
-
         //check diag
         if (x == y) {
             //we're on a diagonal
@@ -79,30 +100,40 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                 if (boardManager.getAtCoordinates(i, i) != playerType)
                     break;
                 if (i == n - 1) {
-                    Log.i("winner diagonal", String.valueOf(playerType));
-
+                    for (int j = 0; j < n; j++) {
+                        point = new Point(j, j);
+                        winnerList.add(point);
+                    }
+                    outputProvider.displayWinnerCells(winnerList);
+                    return true;
                 }
             }
         }
 
-        //check anti diag (thanks rampion)
+        //check anti diag
         for (int i = 0; i < n; i++) {
             if (boardManager.getAtCoordinates(i, (n - 1) - i) != playerType)
                 break;
             if (i == n - 1) {
-                Log.i("winner antidiagonal", String.valueOf(playerType));
-
+                for (int j = 0; j < n; j++) {
+                    point = new Point(j, (n - 1) - j);
+                    winnerList.add(point);
+                }
+                outputProvider.displayWinnerCells(winnerList);
+                return true;
             }
         }
-
         //check draw
         if (boardManager.isFull()) {
-            Log.i("draw", "draw");
-
+            outputProvider.displayMessage("Draw!");
+            return true;
         }
-        return true;
+        return false;
     }
 
+    /*
+    Sets first player
+     */
     @Override
     public int setInitialPlayer() {
         Random generator = new Random();
@@ -117,24 +148,41 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         return -1;
     }
 
+    /*
+    Return number defines what to draw on a board in TicTacToeGame class
+     */
     @Override
     public int onBoardClick(Point point, int firstPlayer, int secondPlayer) {
-        if (checkMove(point.x, point.y)) {
-            turnNumber++;
-            if (playerOneTurn && !playerTwoTurn) {
-                playerOneTurn = false;
-                playerTwoTurn = true;
-                boardManager.insertAtCoordinates(point.x, point.y, firstPlayer);
-                checkEndOfGame(point.x, point.y, firstPlayer);
-                return 0;
-            } else if (!playerOneTurn && playerTwoTurn) {
-                playerTwoTurn = false;
-                playerOneTurn = true;
-                boardManager.insertAtCoordinates(point.x, point.y, secondPlayer);
-                checkEndOfGame(point.x, point.y, secondPlayer);
-                return 1;
+        if (!isGameFinished) {
+            if (checkMove(point.x, point.y)) {
+                turnNumber++;
+                if (playerOneTurn && !playerTwoTurn) {
+                    playerOneTurn = false;
+                    playerTwoTurn = true;
+                    boardManager.insertAtCoordinates(point.x, point.y, firstPlayer);
+                    isGameFinished = checkEndOfGame(point.x, point.y, firstPlayer);
+                    if (!isGameFinished)
+                        outputProvider.displayMessage("Player 2 turn!");
+                    else
+                        outputProvider.displayMessage("Player 1 wins!");
+
+                    return 0;
+                } else if (!playerOneTurn && playerTwoTurn) {
+                    playerTwoTurn = false;
+                    playerOneTurn = true;
+                    boardManager.insertAtCoordinates(point.x, point.y, secondPlayer);
+                    isGameFinished = checkEndOfGame(point.x, point.y, secondPlayer);
+                    if (!isGameFinished)
+                        outputProvider.displayMessage("Player 1 turn!");
+                    else
+                        outputProvider.displayMessage("Player 2 wins!");
+
+                    return 1;
+                }
             }
         }
+
+
         return -1;
     }
 
@@ -145,11 +193,6 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
 
     @Override
     public void onPause() {
-
-    }
-
-    private void mainGameLoop() {
-
 
     }
 

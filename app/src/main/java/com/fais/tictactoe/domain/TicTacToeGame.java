@@ -26,19 +26,18 @@ public class TicTacToeGame {
     private int firstPlayer;
     private int secondPlayer;
 
-    public TicTacToeGame(int firstPlayer, int secondPlayer, int boardSize) {
+    public TicTacToeGame(int firstPlayer, int secondPlayer, int boardSize, OutputProvider outputProvider) {
         this.boardSize = boardSize;
         this.boardManager = new TicTacToeBoardManager();
         this.boardManager.setBoardSize(boardSize);
         setPlayers(firstPlayer, secondPlayer);
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
-        this.gameEngine = new TicTacToeGameEngine(playerManager, boardManager);
+        this.outputProvider = outputProvider;
+
+        this.gameEngine = new TicTacToeGameEngine(playerManager, boardManager, outputProvider);
     }
 
-    public void setOutputProvider(OutputProvider outputProvider) {
-        this.outputProvider = outputProvider;
-    }
 
     public void setPlayers(int firstPlayer, int secondPlayer) {
         PlayerFactory playerFactory = new PlayerFactory();
@@ -62,16 +61,14 @@ public class TicTacToeGame {
         Point point = Util.convert1DIndexTo2D(position, boardSize);
 
 
-        // check if move is possible
-        int isMovePossible = gameEngine.onBoardClick(point, firstPlayer, secondPlayer);
+        // sets next player move
+        int playerMove = gameEngine.onBoardClick(point, firstPlayer, secondPlayer);
 
-        if (isMovePossible == 0) {
+        if (playerMove == 0) {
             // draw on board
             // TODO: PRZEKAZYWAC IKONE AKTUALNEGO GRACZA DO NARYSOWANIA
-            outputProvider.displayMessage("Player 2 turn");
             outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_1_thumbnail);
-        } else if (isMovePossible == 1) {
-            outputProvider.displayMessage("Player 1 turn");
+        } else if (playerMove == 1) {
             outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_2_thumbnail);
         }
     }
