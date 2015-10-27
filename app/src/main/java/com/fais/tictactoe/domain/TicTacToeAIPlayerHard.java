@@ -7,15 +7,22 @@ import android.util.Log;
 import com.fais.tictactoe.Data.Player;
 import com.fais.tictactoe.utilities.Util;
 
+import java.util.Random;
+
 /**
  * Created by Shevson on 2015-10-25.
  */
 public class TicTacToeAIPlayerHard extends Player {
 
     private TicTacToeGame game;
+    private boolean firstMove;
+    private int howManyOccupied;
 
-    public TicTacToeAIPlayerHard(TicTacToeGame game) {
+    public TicTacToeAIPlayerHard(TicTacToeGame game)
+    {
         this.game = game;
+        firstMove = true;
+        howManyOccupied = 0;
     }
 
     @Override
@@ -48,6 +55,7 @@ public class TicTacToeAIPlayerHard extends Player {
 
         @Override
         protected Void doInBackground(Void... arg0) {
+            howManyOccupied += 2;
             checkPotentialWinningMoves();
             if(!madeMove)
             {
@@ -128,22 +136,45 @@ public class TicTacToeAIPlayerHard extends Player {
         // Sprawdza dowolne miejsce, gdzie moze zagrac
         private void checkMoves()
         {
-            for(int x = 0; x<boardsize; x++)
+            System.out.println("Zwykly ruch");
+            Random moveGenerator = new Random();
+            int x1, y1;
+            System.out.println("Ile zajete: "+howManyOccupied+" czy first move: "+firstMove);
+            if(howManyOccupied<((boardsize*boardsize)/2) && firstMove==false)
             {
-                for(int y = 0; y<boardsize; y++)
+                System.out.println("Random");
+                while(!madeMove)
                 {
-                    if(game.getBoardManager().getAtCoordinates(x, y)==0)
+                    x1 = moveGenerator.nextInt(boardsize-1);
+                    y1 = moveGenerator.nextInt(boardsize-1);
+                    if(game.getBoardManager().getAtCoordinates(x1, y1)==0)
                     {
-                        xcoord = x;
-                        ycoord = y;
+                        xcoord = x1;
+                        ycoord = y1;
                         madeMove = true;
                         break;
                     }
-                    if(madeMove) break;
                 }
-                if(madeMove)
+            }
+            else
+            {
+                for(int x = 0; x<boardsize; x++)
                 {
-                    break;
+                    for(int y = 0; y<boardsize; y++)
+                    {
+                        if(game.getBoardManager().getAtCoordinates(x, y)==0)
+                        {
+                            xcoord = x;
+                            ycoord = y;
+                            madeMove = true;
+                            firstMove = false;
+                        }
+                        if(madeMove) break;
+                    }
+                    if(madeMove)
+                    {
+                        break;
+                    }
                 }
             }
         }
