@@ -10,9 +10,10 @@ public abstract class Player
 {
     protected String name;
     protected int playerType;
-    protected boolean isGameStarted = false;
+    protected boolean isGameFinished = true;
     protected BoardManager boardManager;
     protected PlayerManager playerManager;
+    protected int winNr;
 
     public String getName()
     {
@@ -39,8 +40,8 @@ public abstract class Player
         this.playerManager = playerManager;
     }
 
-    public void gameStarted()
+    public void gameFinished(boolean isGameFinished)
     {
-        isGameStarted = true;
+        this.isGameFinished = isGameFinished;
     }
 }

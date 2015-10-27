@@ -25,7 +25,9 @@ public interface PlayerManager
     // przekazanie referencji do GameEngine
     void passGameEngine(GameEngine gameEngine);
 
-    void AIMoves(int x, int y);
+    void AIMoves(int x, int y, int size);
+
+    void notifyGameFinished(boolean isGameFinished);
 
     Player getFirstPlayer();
 

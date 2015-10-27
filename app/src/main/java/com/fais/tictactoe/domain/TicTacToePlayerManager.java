@@ -7,6 +7,7 @@ import com.fais.tictactoe.Data.Player;
 import com.fais.tictactoe.interfaces.BoardManager;
 import com.fais.tictactoe.interfaces.GameEngine;
 import com.fais.tictactoe.interfaces.PlayerManager;
+import com.fais.tictactoe.utilities.Util;
 
 /**
  * Created by paweldylag on 20/10/15.
@@ -92,16 +93,24 @@ public class TicTacToePlayerManager implements PlayerManager{
     public void passGameEngine(GameEngine gameEngine)
     {
         this.gameEngine = gameEngine;
-        firstPlayer.gameStarted();
-        secondPlayer.gameStarted();
+        System.out.println("Przekazuje!");
+
     }
 
     @Override
-    public void AIMoves(int x, int y)
+    public void notifyGameFinished(boolean isGameFinished)
+    {
+        this.isGameFinished = isGameFinished;
+        firstPlayer.gameFinished(this.isGameFinished);
+        secondPlayer.gameFinished(this.isGameFinished);
+    }
+
+    @Override
+    public void AIMoves(int x, int y, int size)
     {
         Point point = new Point();
-        point.set(x,y);
-        gameEngine.onBoardClick(point,firstPlayer.getPlayerType(),secondPlayer.getPlayerType());
+        point.set(x, y);
+        gameEngine.getGame().onBoardClick(Util.convert2DIndexTo1D(x,y,size));
     }
 
     @Override

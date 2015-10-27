@@ -2,6 +2,8 @@ package com.fais.tictactoe.interfaces;
 
 import android.graphics.Point;
 
+import com.fais.tictactoe.domain.TicTacToeGame;
+
 /**
  * Created by paweldylag on 20/10/15.
  */
@@ -36,5 +38,8 @@ public interface GameEngine {
 
     // powiadamia czy gra wystartowala
     boolean isGameFinished();
+
+    // referencja do Game dla AI
+    TicTacToeGame getGame();
 
 }

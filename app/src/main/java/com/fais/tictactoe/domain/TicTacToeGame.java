@@ -30,7 +30,7 @@ public class TicTacToeGame {
         this.boardManager.setBoardSize(boardSize);
         this.outputProvider = outputProvider;
         setPlayers(firstPlayer, secondPlayer);
-        this.gameEngine = new TicTacToeGameEngine(playerManager, boardManager, outputProvider);
+        this.gameEngine = new TicTacToeGameEngine(playerManager, boardManager, outputProvider, this);
     }
 
 

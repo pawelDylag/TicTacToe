@@ -13,9 +13,12 @@ public class TicTacToeAIPlayerEasy extends Player
     private int boardsize;
     private boolean gameStarted = false;
     private boolean madeMove = false;
+    private int xcoord;
+    private int ycoord;
+    int myInRow = 0;
+    int myInDiag = 0;
     public TicTacToeAIPlayerEasy()
     {
-        System.out.println("Wywoluje czekanie");
         new waitMyMove().execute();
     }
 
@@ -31,32 +34,45 @@ public class TicTacToeAIPlayerEasy extends Player
         @Override
         protected String doInBackground(String... strings)
         {
-            System.out.println("Czekam na start");
-            while(!isGameStarted)
+            while(isGameFinished)
             {
-                System.out.println("isGameStarted: " + isGameStarted);
                 // wait for game to start
             }
             if(!gameStarted)
             {
                 boardsize = boardManager.getBoardSize();
+                if(boardsize>5)
+                {
+                    winNr = 5;
+                }
+                else if(boardsize==3)
+                {
+                    winNr = boardsize;
+                }
+                else
+                {
+                    winNr = boardsize - 1;
+                }
             }
             gameStarted = true;
-            System.out.println("Czekam na ture");
             while(!playerManager.isMyTurn(2))
             {
-                System.out.println("Czyja tura "+playerManager.isMyTurn(2));
                 try
                 {
-                    Thread.sleep(500);
+                    Thread.sleep(2000);
                 }
                 catch(InterruptedException e)
                 {
                     e.printStackTrace();
                 }
             }
-            System.out.println("Robie ruch!");
-            checkPotentialMoves();
+            System.out.println("Licze ruch!");
+            // TU ZACZYNA MYSLEC
+            checkPotentialWinningMoves();
+            if(!madeMove)
+            {
+                checkMoves();
+            }
             return "MyMove";
         }
 
@@ -70,22 +86,53 @@ public class TicTacToeAIPlayerEasy extends Player
         protected void onPostExecute(String s)
         {
             super.onPostExecute(s);
-            new waitMyMove().execute();
+            playerManager.AIMoves(xcoord, ycoord, boardsize);
+            madeMove = false;
+            if(!isGameFinished)
+            {
+                new waitMyMove().execute();
+            }
         }
     }
 
-    private void checkPotentialMoves()
+    private void checkPotentialWinningMoves()
     {
-        int inRow = 0;
-        int inDiag = 0;
         for(int x = 0; x<boardsize; x++)
         {
             for(int y = 0; y<boardsize; y++)
             {
-                if(boardManager.getAtCoordinates(x,y)==0 )
+                if(boardManager.getAtCoordinates(x,y)==playerType)
                 {
-                    playerManager.AIMoves(x,y);
-                    System.out.println("Mam ruch!");
+                    System.out.println("Trafilem na swoj na polu: "+x+";"+y);
+                    canIWinXRow(x, y);
+                    if(!madeMove)
+                    {
+                        canIWinYRow(x,y);
+                    }
+                    if(!madeMove)
+                    {
+                        canIWinDiag(x,y);
+                    }
+                }
+                if(madeMove) break;
+            }
+            if(madeMove)
+            {
+                break;
+            }
+        }
+    }
+
+    private void checkMoves()
+    {
+        for(int x = 0; x<boardsize; x++)
+        {
+            for(int y = 0; y<boardsize; y++)
+            {
+                if(boardManager.getAtCoordinates(x,y)==0)
+                {
+                    xcoord = x;
+                    ycoord = y;
                     madeMove = true;
                     break;
                 }
@@ -93,9 +140,218 @@ public class TicTacToeAIPlayerEasy extends Player
             }
             if(madeMove)
             {
-                madeMove = false;
                 break;
             }
         }
+    }
+
+    private void canIWinXRow(int x, int y)
+    {
+        int a;
+        if(boardsize-x>=winNr)
+        {
+            for (a = x; a < boardsize; a++)
+            {
+                if (boardManager.getAtCoordinates(a, y) == playerType)
+                {
+                    myInRow++;
+                }
+                else
+                {
+                    if (myInRow == winNr-1 && boardManager.getAtCoordinates(a,y)==0)
+                    {
+                        xcoord = a;
+                        ycoord = y;
+                        madeMove = true;
+                        break;
+                    }
+                    break;
+                }
+            }
+            if (myInRow == winNr-1 && boardManager.getAtCoordinates(a,y)==0)
+            {
+                xcoord = a;
+                ycoord = y;
+                madeMove = true;
+            }
+            myInRow = 0;
+        }
+        else
+        {
+            for (a = x; a >= 0; a--)
+            {
+                if (boardManager.getAtCoordinates(a, y) == playerType)
+                {
+                    myInRow++;
+                }
+                else
+                {
+                    if (myInRow == winNr-1 && boardManager.getAtCoordinates(a,y)==0)
+                    {
+                        xcoord = a;
+                        ycoord = y;
+                        madeMove = true;
+                        break;
+                    }
+                    break;
+                }
+            }
+            if (myInRow == winNr-1 && boardManager.getAtCoordinates(a+1,y)==0)
+            {
+                xcoord = a;
+                ycoord = y;
+                madeMove = true;
+            }
+            myInRow = 0;
+        }
+    }
+
+    private void canIWinYRow(int x, int y)
+    {
+        int a;
+        if(boardsize-y>=winNr)
+        {
+            for (a = y; a < boardsize; a++)
+            {
+                if (boardManager.getAtCoordinates(x, a) == playerType)
+                {
+                    myInRow++;
+                }
+                else
+                {
+                    if (myInRow == winNr-1 && boardManager.getAtCoordinates(x,a)==0)
+                    {
+                        xcoord = x;
+                        ycoord = a;
+                        madeMove = true;
+                        break;
+                    }
+                    break;
+                }
+            }
+            if (myInRow == winNr-1 && boardManager.getAtCoordinates(x,a)==0)
+            {
+                xcoord = x;
+                ycoord = a;
+                madeMove = true;
+            }
+            myInRow = 0;
+        }
+        else
+        {
+            for (a = y; a >= 0; a--)
+            {
+                if (boardManager.getAtCoordinates(x, a) == playerType)
+                {
+                    myInRow++;
+                }
+                else
+                {
+                    if (myInRow == winNr-1 && boardManager.getAtCoordinates(x,a)==0)
+                    {
+                        xcoord = x;
+                        ycoord = a;
+                        madeMove = true;
+                        break;
+                    }
+                    break;
+                }
+            }
+            if (myInRow == winNr-1 && boardManager.getAtCoordinates(x,a+1)==0)
+            {
+                xcoord = x;
+                ycoord = a;
+                madeMove = true;
+            }
+            myInRow = 0;
+        }
+    }
+
+    private void canIWinDiag(int x, int y)
+    {
+        int a,b;
+        a = x;
+        b = y;
+
+        // Petla a++ b++
+        while(a<boardsize && b<boardsize)
+        {
+            if(boardManager.getAtCoordinates(a,b)==playerType)
+            {
+                myInDiag++;
+            }
+            a++;
+            b++;
+        }
+        if(myInDiag == winNr-1 && boardManager.getAtCoordinates(a-1,b-1)==0)
+        {
+            xcoord = a-1;
+            ycoord = b-1;
+            madeMove = true;
+        }
+        myInDiag = 0; a=x; b=y;
+
+        // Petla a++ b--
+        if(!madeMove)
+        {
+            while(a<boardsize && b>=0)
+            {
+                if(boardManager.getAtCoordinates(a,b)==playerType)
+                {
+                    myInDiag++;
+                }
+                a++;
+                b--;
+            }
+            if(myInDiag == winNr-1 && boardManager.getAtCoordinates(a-1,b+1)==0)
+            {
+                xcoord = a-1;
+                ycoord = b+1;
+                madeMove = true;
+            }
+        }
+        myInDiag = 0; a=x; b=y;
+
+        //Petla a-- b++
+        if(!madeMove)
+        {
+            while(a>=0 && b<boardsize)
+            {
+                if(boardManager.getAtCoordinates(a,b)==playerType)
+                {
+                    myInDiag++;
+                }
+                a--;
+                b++;
+            }
+            if(myInDiag == winNr-1 && boardManager.getAtCoordinates(a+1,b-1)==0)
+            {
+                xcoord = a+1;
+                ycoord = b-1;
+                madeMove = true;
+            }
+        }
+        myInDiag = 0; a=x; b=y;
+
+        // Petla a-- b--
+        if(!madeMove)
+        {
+            while(a>=0 && b>=0)
+            {
+                if(boardManager.getAtCoordinates(a,b)==playerType)
+                {
+                    myInDiag++;
+                }
+                a--;
+                b--;
+            }
+        }
+        if(myInDiag == winNr-1 && boardManager.getAtCoordinates(a+1,b+1)==0)
+        {
+            xcoord = a+1;
+            ycoord = b+1;
+            madeMove = true;
+        }
+        myInDiag = 0;
     }
 }

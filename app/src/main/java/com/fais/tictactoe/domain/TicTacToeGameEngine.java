@@ -22,15 +22,17 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
     private PlayerManager playerManager;
     private BoardManager boardManager;
     private OutputProvider outputProvider;
+    private TicTacToeGame game;
     private int turnNumber = 0;
     private boolean isGameFinished;
     private boolean playerOneTurn = false;
     private boolean playerTwoTurn = false;
 
-    public TicTacToeGameEngine(PlayerManager playerManager, BoardManager boardManager, OutputProvider outputProvider) {
+    public TicTacToeGameEngine(PlayerManager playerManager, BoardManager boardManager, OutputProvider outputProvider, TicTacToeGame game) {
         this.playerManager = playerManager;
         this.boardManager = boardManager;
         this.outputProvider = outputProvider;
+        this.game = game;
     }
 
     @Override
@@ -157,11 +159,15 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
     public int setInitialPlayer() {
         Random generator = new Random();
         int i = generator.nextInt(2);
+        playerManager.passGameEngine(this);
+        playerManager.notifyGameFinished(isGameFinished);
         if (i == 0) {
             playerOneTurn = true;
+            playerManager.whoMoves(1);
             return Parameters.FIRST_PLAYER;
         } else if (i == 1) {
             playerTwoTurn = true;
+            playerManager.whoMoves(2);
             return Parameters.SECOND_PLAYER;
         }
         return Parameters.ERROR_RESULT;
@@ -185,17 +191,29 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                     playerTwoTurn = true;
                     boardManager.insertAtCoordinates(point.x, point.y, firstPlayer);
                     isGameFinished = checkEndOfGame(point.x, point.y, firstPlayer);
+                    playerManager.notifyGameFinished(isGameFinished);
+                    playerManager.whoMoves(2);
                     return Parameters.FIRST_PLAYER;
                 } else if (!playerOneTurn && playerTwoTurn) {
                     playerTwoTurn = false;
                     playerOneTurn = true;
                     boardManager.insertAtCoordinates(point.x, point.y, secondPlayer);
                     isGameFinished = checkEndOfGame(point.x, point.y, secondPlayer);
+                    playerManager.notifyGameFinished(isGameFinished);
+                    playerManager.whoMoves(1);
                     return Parameters.SECOND_PLAYER;
                 }
             }
         }
-        return Parameters.ERROR_RESULT;
+
+
+        return -1;
+    }
+
+    @Override
+    public TicTacToeGame getGame()
+    {
+        return game;
     }
 
     @Override
