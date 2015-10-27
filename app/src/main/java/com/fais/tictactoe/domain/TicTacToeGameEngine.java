@@ -64,15 +64,17 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         return (game.getBoardManager().getAtCoordinates(x, y) == 0);
     }
 
+
     /**
      * Checks all game conditions (columns, raw, (anti)diagonals, draw)
      * @param x
      * @param y
+     * @param numberOfCellsToWin
      * @param playerType
      * @return
      */
     @Override
-    public int checkEndOfGame(int x, int y, int playerType) {
+    public int checkEndOfGame(int x, int y, int numberOfCellsToWin, int playerType) {
 
         Log.d("TicTacToeGameEngine", "checkEndOfGame() : for playerType = " + playerType);
         int n = game.getBoardManager().getBoardSize();
@@ -154,7 +156,7 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                 // if move is possible, notify output to draw player icon
                 game.getOutputProvider().drawOnBoard(point.x, point.y, currentPlayer.getBoardDrawableResource());
                 // check if this move was winning move.
-                int gameResult = checkEndOfGame(point.x, point.y, currentPlayer.getPlayerType());
+                int gameResult = checkEndOfGame(point.x, point.y, numberOfCellsToWin,  currentPlayer.getPlayerType());
                 if (gameResult == Parameters.GAME_RESULT_FINISHED) {
                     game.getOutputProvider().displayWinnerCells(winnerPoints);
                     isGameInProgress = false;

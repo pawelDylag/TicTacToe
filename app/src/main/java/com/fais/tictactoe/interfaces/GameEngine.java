@@ -19,7 +19,7 @@ public interface GameEngine {
     boolean checkMoveIsPossible(int x, int y);
 
     // sprawdzenie warunkow wygranej
-    int checkEndOfGame(int x, int y, int playerType);
+    int checkEndOfGame(int x, int y, int numberOfCellsToWin, int playerType);
 
     // asynchroniczne wydarzenie - kiedy user kliknie plansze
     int onBoardClick(Point point);
