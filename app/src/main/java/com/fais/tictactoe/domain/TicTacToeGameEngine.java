@@ -27,17 +27,18 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
     private boolean isGameInProgress;
 
     /**
-     * Flag for first player turn - if false, then second player turn is in process
-     */
-    private boolean firstPlayerTurn;
-
-    /**
      * If finished game - this field contains winning combination
      */
     private ArrayList<Point> winnerPoints = new ArrayList<>();
 
+    /**
+     * How many cells player needs in row etc to win
+     */
+    private int numberOfCellsToWin;
+
     public TicTacToeGameEngine(TicTacToeGame game) {
-      this.game = game;
+        this.game = game;
+        numberOfCellsToWin = getWinConditions(game.getBoardManager().getBoardSize());
     }
 
     @Override
@@ -183,6 +184,18 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
     @Override
     public void onPause() {
 
+    }
+
+    private int getWinConditions(int boardSize) {
+        if (boardSize <= 4) {
+            return 3;
+        } else if (boardSize > 4 && boardSize <= 6 ) {
+            return 4;
+        } else return 5;
+    }
+
+    public int getNumberOfCellsToWin() {
+        return this.numberOfCellsToWin;
     }
 
 

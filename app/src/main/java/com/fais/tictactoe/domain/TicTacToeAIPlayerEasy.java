@@ -21,7 +21,7 @@ public class TicTacToeAIPlayerEasy extends Player
     }
     private void checkMove(int x, int y)
     {
-        boardSize = boardManager.getBoardSize();
+        boardSize = game.getBoardManager().getBoardSize();
     }
 
     @Override

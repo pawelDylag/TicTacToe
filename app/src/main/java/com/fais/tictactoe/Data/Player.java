@@ -10,8 +10,7 @@ public abstract class Player
 {
     protected String name;
     protected int playerType;
-    protected BoardManager boardManager;
-    protected PlayerManager playerManager;
+
     protected int boardDrawableResource;
 
     public String getName()
@@ -28,13 +27,6 @@ public abstract class Player
     {
         return playerType;
     }
-
-    public void setBoardManager(BoardManager boardManager)
-    {
-        this.boardManager = boardManager;
-    }
-
-    public void setPlayerManager(PlayerManager playerManager){ this.playerManager = playerManager; }
 
     public int getBoardDrawableResource() {
         return boardDrawableResource;

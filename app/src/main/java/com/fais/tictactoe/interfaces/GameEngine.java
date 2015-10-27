@@ -30,4 +30,5 @@ public interface GameEngine {
     // asynchroniczne wydarzenie - kiedy user/system zastopuje gre
     void onPause();
 
+    int getNumberOfCellsToWin();
 }
