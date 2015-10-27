@@ -67,10 +67,10 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
 
     /**
      * Checks all game conditions (columns, raw, (anti)diagonals, draw)
-     * @param x
-     * @param y
-     * @param numberOfCellsToWin
-     * @param playerType
+     * @param x - last cell clicked x
+     * @param y - last cell clicked y
+     * @param numberOfCellsToWin - parameter indicating end of game condition
+     * @param playerType - last cell clicked player type
      * @return
      */
     @Override
