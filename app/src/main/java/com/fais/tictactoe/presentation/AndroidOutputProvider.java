@@ -100,7 +100,9 @@ public class AndroidOutputProvider implements OutputProvider{
         if (winnerPoints.size() > boardSize * boardSize) {
             throw new IllegalArgumentException("Too many winner points.");
         }
-        playSound(R.raw.win);
+        if (winnerPoints.size() > 0) {
+            playSound(R.raw.win);
+        }
         // run through all items
         for (int i = 0; i < boardSize * boardSize; i++) {
             // flag if current point is winning point

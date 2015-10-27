@@ -141,7 +141,7 @@ public class MenuActivity extends Activity {
                     result = Parameters.PLAYER_AI_EASY;
             }
         } else {
-            result = Parameters.PLAYER_HUMAN_TWO;
+            result = Parameters.PLAYER_SECOND_HUMAN;
         }
         return result;
     }

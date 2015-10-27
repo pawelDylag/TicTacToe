@@ -7,5 +7,8 @@ import com.fais.tictactoe.Data.Player;
  */
 public class TicTacToeHumanPlayer extends Player
 {
-
+    @Override
+    public void onTurnReceived() {
+        // do nothing
+    }
 }

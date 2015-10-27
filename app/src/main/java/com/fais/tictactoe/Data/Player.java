@@ -12,6 +12,7 @@ public abstract class Player
     protected int playerType;
     protected BoardManager boardManager;
     protected PlayerManager playerManager;
+    protected int boardDrawableResource;
 
     public String getName()
     {
@@ -34,4 +35,14 @@ public abstract class Player
     }
 
     public void setPlayerManager(PlayerManager playerManager){ this.playerManager = playerManager; }
+
+    public int getBoardDrawableResource() {
+        return boardDrawableResource;
+    }
+
+    public void setBoardDrawableResource(int boardDrawableResource) {
+        this.boardDrawableResource = boardDrawableResource;
+    }
+
+    public abstract void onTurnReceived();
 }

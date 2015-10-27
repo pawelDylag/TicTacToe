@@ -1,52 +1,54 @@
 package com.fais.tictactoe.domain;
 
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.util.Log;
 
-import com.fais.tictactoe.R;
-import com.fais.tictactoe.interfaces.BoardManager;
-import com.fais.tictactoe.interfaces.OutputProvider;
-import com.fais.tictactoe.interfaces.PlayerManager;
-import com.fais.tictactoe.presentation.AndroidOutputProvider;
+import com.fais.tictactoe.Data.Parameters;
+import com.fais.tictactoe.Data.Player;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by paweldylag on 20/10/15.
  */
 public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEngine {
 
-    private PlayerManager playerManager;
-    private BoardManager boardManager;
-    private OutputProvider outputProvider;
-    private ArrayList<Point> winnerList = new ArrayList<>();
-    private Point point;
-    private int turnNumber = 0;
-    private boolean isGameFinished;
-    private boolean playerOneTurn = false;
-    private boolean playerTwoTurn = false;
 
-    public TicTacToeGameEngine(PlayerManager playerManager, BoardManager boardManager, OutputProvider outputProvider) {
-        this.playerManager = playerManager;
-        this.boardManager = boardManager;
-        this.outputProvider = outputProvider;
+    private static final String TAG = TicTacToeGameEngine.class.getSimpleName();
+
+    /**
+     * Main Game module object
+     */
+    private TicTacToeGame game;
+
+    /**
+     * FLag indicating whether game is in progress or not
+     */
+    private boolean isGameInProgress;
+
+    /**
+     * Flag for first player turn - if false, then second player turn is in process
+     */
+    private boolean firstPlayerTurn;
+
+    /**
+     * If finished game - this field contains winning combination
+     */
+    private ArrayList<Point> winnerPoints = new ArrayList<>();
+
+    public TicTacToeGameEngine(TicTacToeGame game) {
+      this.game = game;
     }
 
     @Override
     public void startGame() {
-        isGameFinished = false;
+        isGameInProgress = true;
+        game.getPlayerManager().currentPlayer().onTurnReceived();
     }
 
     @Override
     public void stopGame() {
-        isGameFinished = true;
-    }
-
-    @Override
-    public int getCurrentTurnNumber() {
-        return turnNumber;
+        isGameInProgress = false;
     }
 
     /**
@@ -57,151 +59,120 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
      * @return
      */
     @Override
-    public boolean checkMove(int x, int y) {
-        return (boardManager.getAtCoordinates(x, y) == 0);
+    public boolean checkMoveIsPossible(int x, int y) {
+        return (game.getBoardManager().getAtCoordinates(x, y) == 0);
     }
-
 
     /**
      * Checks all game conditions (columns, raw, (anti)diagonals, draw)
-     *
      * @param x
      * @param y
      * @param playerType
      * @return
      */
     @Override
-    public boolean checkEndOfGame(int x, int y, int playerType) {
-        int n = boardManager.getBoardSize();
+    public int checkEndOfGame(int x, int y, int playerType) {
+
+        Log.d("TicTacToeGameEngine", "checkEndOfGame() : for playerType = " + playerType);
+        int n = game.getBoardManager().getBoardSize();
+
         //check col
         for (int i = 0; i < n; i++) {
-            if (boardManager.getAtCoordinates(x, i) != playerType)
+            if (game.getBoardManager().getAtCoordinates(x, i) != playerType)
                 break;
             if (i == n - 1) {
                 for (int j = 0; j < n; j++) {
-                    point = new Point(x, j);
-                    winnerList.add(point);
+                    winnerPoints.add(new Point(x, j));
                 }
-                outputProvider.displayWinnerCells(winnerList);
-                return true;
+                return Parameters.GAME_RESULT_FINISHED;
             }
         }
         //check row
         for (int i = 0; i < n; i++) {
-            if (boardManager.getAtCoordinates(i, y) != playerType)
+            if (game.getBoardManager().getAtCoordinates(i, y) != playerType)
                 break;
             if (i == n - 1) {
                 for (int j = 0; j < n; j++) {
-                    point = new Point(j, y);
-                    winnerList.add(point);
+                    winnerPoints.add(new Point(j, y));
                 }
-                outputProvider.displayWinnerCells(winnerList);
-                return true;
+                return Parameters.GAME_RESULT_FINISHED;
             }
         }
         //check diag
         if (x == y) {
             //we're on a diagonal
             for (int i = 0; i < n; i++) {
-                if (boardManager.getAtCoordinates(i, i) != playerType)
+                if (game.getBoardManager().getAtCoordinates(i, i) != playerType)
                     break;
                 if (i == n - 1) {
                     for (int j = 0; j < n; j++) {
-                        point = new Point(j, j);
-                        winnerList.add(point);
+                        winnerPoints.add(new Point(j, j));
                     }
-                    outputProvider.displayWinnerCells(winnerList);
-                    return true;
+                    return Parameters.GAME_RESULT_FINISHED;
                 }
             }
         }
 
         //check anti diag
         for (int i = 0; i < n; i++) {
-            if (boardManager.getAtCoordinates(i, (n - 1) - i) != playerType)
+            if (game.getBoardManager().getAtCoordinates(i, (n - 1) - i) != playerType)
                 break;
             if (i == n - 1) {
                 for (int j = 0; j < n; j++) {
-                    point = new Point(j, (n - 1) - j);
-                    winnerList.add(point);
+                    winnerPoints.add(new Point(j, (n - 1) - j));
                 }
-                outputProvider.displayWinnerCells(winnerList);
-                return true;
+                return Parameters.GAME_RESULT_FINISHED;
             }
         }
         //check draw
-        if (boardManager.isFull()) {
-            return true;
+        if (game.getBoardManager().isFull()) {
+            return Parameters.GAME_RESULT_DRAW;
         }
-        return false;
-    }
 
-    /**
-     * Sets first player
-     *
-     * @return
-     */
-    @Override
-    public int setInitialPlayer() {
-        Random generator = new Random();
-        int i = generator.nextInt(2);
-        if (i == 0) {
-            playerOneTurn = true;
-            return 0;
-        } else if (i == 1) {
-            playerTwoTurn = true;
-            return 1;
-        }
-        return -1;
+        return Parameters.GAME_RESULT_NOT_FINISHED;
     }
 
     /**
      * Return number defines what to draw on a board in TicTacToeGame class
      *
      * @param point        Point clicked on board
-     * @param firstPlayer  id
-     * @param secondPlayer id
      * @return
      */
     @Override
-    public int onBoardClick(Point point, int firstPlayer, int secondPlayer) {
-        if (!isGameFinished) {
-            if (checkMove(point.x, point.y)) {
-                turnNumber++;
-                if (playerOneTurn && !playerTwoTurn) {
-                    playerOneTurn = false;
-                    playerTwoTurn = true;
-                    boardManager.insertAtCoordinates(point.x, point.y, firstPlayer);
-                    isGameFinished = checkEndOfGame(point.x, point.y, firstPlayer);
-                    if (!isGameFinished)
-                        outputProvider.displayMessage("Player 2 turn!");
-                    else if (boardManager.isFull()) {
-                        outputProvider.displayMessage("Draw!");
-                        return 0;
-                    } else
-                        outputProvider.displayMessage("Player 1 wins!");
-
-                    return 0;
-                } else if (!playerOneTurn && playerTwoTurn) {
-                    playerTwoTurn = false;
-                    playerOneTurn = true;
-                    boardManager.insertAtCoordinates(point.x, point.y, secondPlayer);
-                    isGameFinished = checkEndOfGame(point.x, point.y, secondPlayer);
-                    if (!isGameFinished)
-                        outputProvider.displayMessage("Player 1 turn!");
-                    else if (boardManager.isFull()) {
-                        outputProvider.displayMessage("Draw!");
-                        return 0;
-                    } else
-                        outputProvider.displayMessage("Player 2 wins!");
-
-                    return 1;
+    public int onBoardClick(Point point) {
+        Log.d(TAG, "onBoardClick()");
+        int result = Parameters.CLICK_RESULT_MOVE_NOT_POSSIBLE;
+        // check if game is in progress
+        if(isGameInProgress) {
+            // get player whose turn is in progress
+            Player currentPlayer = game.getPlayerManager().currentPlayer();
+            // check if this move is possible
+            if (checkMoveIsPossible(point.x, point.y)) {
+                // insert new point to game logic
+                game.getBoardManager().insertAtCoordinates(point.x, point.y, currentPlayer.getPlayerType());
+                // if move is possible, notify output to draw player icon
+                game.getOutputProvider().drawOnBoard(point.x, point.y, currentPlayer.getBoardDrawableResource());
+                // check if this move was winning move.
+                int gameResult = checkEndOfGame(point.x, point.y, currentPlayer.getPlayerType());
+                if (gameResult == Parameters.GAME_RESULT_FINISHED) {
+                    game.getOutputProvider().displayWinnerCells(winnerPoints);
+                    isGameInProgress = false;
+                    result = Parameters.CLICK_RESULT_MOVE_OK;
+                    Log.d(TAG, "onBoardClick() : GAME FINISHED");
+                } else if (gameResult == Parameters.GAME_RESULT_DRAW) {
+                    game.getOutputProvider().displayWinnerCells(winnerPoints);
+                    isGameInProgress = false;
+                    result = Parameters.CLICK_RESULT_MOVE_OK;
+                    Log.d(TAG, "onBoardClick() : DRAW");
+                } else {
+                    // launch next turn
+                    game.getPlayerManager().nextTurn();
+                    result = Parameters.CLICK_RESULT_MOVE_OK;
+                    Log.d(TAG, "onBoardClick() : NEXT TURN");
                 }
             }
         }
-
-
-        return -1;
+        return result;
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.fais.tictactoe.domain.TicTacToeAIPlayerEasy;
 import com.fais.tictactoe.domain.TicTacToeAIPlayerHard;
+import com.fais.tictactoe.domain.TicTacToeGame;
 import com.fais.tictactoe.domain.TicTacToeHumanPlayer;
 
 /**
@@ -18,7 +19,7 @@ public class PlayerFactory
     }
 
     @Nullable
-    public Player getPlayer(int playerType)
+    public Player getPlayer(int playerType, TicTacToeGame game)
     {
         switch(playerType)
         {
@@ -26,16 +27,16 @@ public class PlayerFactory
                 player = new TicTacToeHumanPlayer();
                 player.setPlayerType(playerType);
                 break;
-            case Parameters.PLAYER_HUMAN_TWO:
+            case Parameters.PLAYER_SECOND_HUMAN:
                 player = new TicTacToeHumanPlayer();
                 player.setPlayerType(playerType);
                 break;
             case Parameters.PLAYER_AI_EASY:
-                player = new TicTacToeAIPlayerEasy();
+                player = new TicTacToeAIPlayerEasy(game);
                 player.setPlayerType(playerType);
                 break;
             case Parameters.PLAYER_AI_HARD:
-                player = new TicTacToeAIPlayerHard();
+                player = new TicTacToeAIPlayerHard(game);
                 player.setPlayerType(playerType);
                 break;
             default:

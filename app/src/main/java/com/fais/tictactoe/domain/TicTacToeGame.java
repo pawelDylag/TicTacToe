@@ -1,6 +1,7 @@
 package com.fais.tictactoe.domain;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import com.fais.tictactoe.Data.Parameters;
 import com.fais.tictactoe.Data.PlayerFactory;
@@ -18,52 +19,38 @@ import com.fais.tictactoe.interfaces.GameEngine;
  */
 public class TicTacToeGame {
 
+    private static final String TAG = TicTacToeGame.class.getSimpleName();
+
     private GameEngine gameEngine;
     private BoardManager boardManager;
     private PlayerManager playerManager;
-    private int boardSize;
     private OutputProvider outputProvider;
+    private int boardSize;
 
     public TicTacToeGame(int firstPlayer, int secondPlayer, int boardSize, OutputProvider outputProvider) {
         this.boardSize = boardSize;
-        this.boardManager = new TicTacToeBoardManager();
-        this.boardManager.setBoardSize(boardSize);
+        this.boardManager = new TicTacToeBoardManager(boardSize);
         this.outputProvider = outputProvider;
-        setPlayers(firstPlayer, secondPlayer);
-        this.gameEngine = new TicTacToeGameEngine(playerManager, boardManager, outputProvider);
-    }
-
-
-    public void setPlayers(int firstPlayer, int secondPlayer) {
+        // create player objects
         PlayerFactory playerFactory = new PlayerFactory();
-        this.playerManager = new TicTacToePlayerManager(playerFactory.getPlayer(firstPlayer),
-                playerFactory.getPlayer(secondPlayer));
-        this.playerManager.passBoardManager(this.boardManager);
-        this.playerManager.passPlayerManager();
+        this.playerManager = new TicTacToePlayerManager(this, playerFactory.getPlayer(firstPlayer, this),
+                playerFactory.getPlayer(secondPlayer, this));
+        // set game engine
+        this.gameEngine = new TicTacToeGameEngine(this);
     }
 
     public void start() {
         gameEngine.startGame();
-        int startingPlayer = gameEngine.setInitialPlayer();
-        if(startingPlayer == 0)
-            outputProvider.displayMessage("Player 1 turn");
-        else if (startingPlayer == 1)
-            outputProvider.displayMessage("Player 2 turn");
     }
 
     public void onBoardClick(int position) {
-        // convert click position from 1d to 2d
-        Point point = Util.convert1DIndexTo2D(position, boardSize);
-        // sets next player move
-        int playerMove = gameEngine.onBoardClick(point, playerManager.getFirstPlayer().getPlayerType(),
-                                                                    playerManager.getSecondPlayer().getPlayerType());
-        // check player move
-        if (playerMove == 0) {
-            // draw on board
-            // TODO: PRZEKAZYWAC IKONE AKTUALNEGO GRACZA DO NARYSOWANIA
-            outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_1_thumbnail);
-        } else if (playerMove == 1) {
-            outputProvider.drawOnBoard(point.x, point.y, R.drawable.board_player_2_thumbnail);
+        Log.d(TAG, "onBoardClick() : playerType = " + playerManager.currentPlayer().getPlayerType());
+        // check if not AI turn is in progress
+        int playerType = playerManager.currentPlayer().getPlayerType();
+        if (playerType == Parameters.PLAYER_HUMAN || playerType == Parameters.PLAYER_SECOND_HUMAN) {
+            // convert click position from 1d to 2d
+            Point point = Util.convert1DIndexTo2D(position, boardSize);
+            gameEngine.onBoardClick(point);
         }
     }
 
@@ -73,5 +60,21 @@ public class TicTacToeGame {
 
     public void onPause() {
         gameEngine.onPause();
+    }
+
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
+
+    public BoardManager getBoardManager() {
+        return boardManager;
+    }
+
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    public OutputProvider getOutputProvider() {
+        return outputProvider;
     }
 }

@@ -8,8 +8,13 @@ import java.util.Arrays;
  * Created by paweldylag on 20/10/15.
  */
 public class TicTacToeBoardManager implements BoardManager {
+
     private int boardSize;
     private int[][] board;
+
+    public TicTacToeBoardManager(int boardSize) {
+        setBoardSize(boardSize);
+    }
 
     @Override
     public boolean insertAtCoordinates(int x, int y, int playerType) {
@@ -26,9 +31,6 @@ public class TicTacToeBoardManager implements BoardManager {
     public void setBoardSize(int boardSize) {
         this.boardSize = boardSize;
         board = new int[boardSize][boardSize];
-        //nie dziala to ponizej dla dwuwymiarowej tablicy dlatego wracam do klasyki
-        //Arrays.fill(board, 0);
-
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++)
                 board[i][j] = 0;

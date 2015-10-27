@@ -7,10 +7,12 @@ import com.fais.tictactoe.Data.Player;
  */
 public class TicTacToeAIPlayerEasy extends Player
 {
+    private TicTacToeGame game;
     private int boardSize;
-    public TicTacToeAIPlayerEasy()
+
+    public TicTacToeAIPlayerEasy(TicTacToeGame game)
     {
-        waitMyTurn();
+       this.game = game;
     }
 
     private void waitMyTurn()
@@ -20,5 +22,10 @@ public class TicTacToeAIPlayerEasy extends Player
     private void checkMove(int x, int y)
     {
         boardSize = boardManager.getBoardSize();
+    }
+
+    @Override
+    public void onTurnReceived() {
+
     }
 }

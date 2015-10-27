@@ -10,13 +10,13 @@ public interface PlayerManager
     // zwraca obiekt Player dla podanego typu
     Player getPlayer(int playerType);
 
-    // przekazuje referencje do BM jesli player jest typu AI
-    void passBoardManager (BoardManager boardManager);
-
-    // przekazuje referencje do siebie dla playerow
-    void passPlayerManager ();
-
     Player getFirstPlayer();
 
     Player getSecondPlayer();
+
+    // pobiera kolejnego graca w turze
+    void nextTurn();
+
+    // pobiera aktualnego graca
+    Player currentPlayer();
 }
