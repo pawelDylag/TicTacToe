@@ -164,6 +164,7 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                     Log.d(TAG, "onBoardClick() : GAME FINISHED");
                 } else if (gameResult == Parameters.GAME_RESULT_DRAW) {
                     game.getOutputProvider().displayWinnerCells(winnerPoints);
+                    game.getOutputProvider().displayMessage("Draw!");
                     isGameInProgress = false;
                     result = Parameters.CLICK_RESULT_MOVE_OK;
                     Log.d(TAG, "onBoardClick() : DRAW");
