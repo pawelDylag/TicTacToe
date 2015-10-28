@@ -67,10 +67,11 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
 
     /**
      * Checks all game conditions (columns, raw, (anti)diagonals, draw)
-     * @param x - last cell clicked x
-     * @param y - last cell clicked y
+     *
+     * @param x                  - last cell clicked x
+     * @param y                  - last cell clicked y
      * @param numberOfCellsToWin - parameter indicating end of game condition
-     * @param playerType - last cell clicked player type
+     * @param playerType         - last cell clicked player type
      * @return
      */
     @Override
@@ -79,58 +80,17 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         Log.d("TicTacToeGameEngine", "checkEndOfGame() : for playerType = " + playerType);
         int n = game.getBoardManager().getBoardSize();
 
-        //check col
-        for (int i = 0; i < n; i++) {
-            if (game.getBoardManager().getAtCoordinates(x, i) != playerType)
-                break;
-            if (i == n - 1) {
-                for (int j = 0; j < n; j++) {
-                    winnerPoints.add(new Point(x, j));
-                }
-                return Parameters.GAME_RESULT_FINISHED;
-            }
-        }
-        //check row
-        for (int i = 0; i < n; i++) {
-            if (game.getBoardManager().getAtCoordinates(i, y) != playerType)
-                break;
-            if (i == n - 1) {
-                for (int j = 0; j < n; j++) {
-                    winnerPoints.add(new Point(j, y));
-                }
-                return Parameters.GAME_RESULT_FINISHED;
-            }
-        }
-        //check diag
-        if (x == y) {
-            //we're on a diagonal
-            for (int i = 0; i < n; i++) {
-                if (game.getBoardManager().getAtCoordinates(i, i) != playerType)
-                    break;
-                if (i == n - 1) {
-                    for (int j = 0; j < n; j++) {
-                        winnerPoints.add(new Point(j, j));
-                    }
-                    return Parameters.GAME_RESULT_FINISHED;
-                }
-            }
-        }
-
-        //check anti diag
-        for (int i = 0; i < n; i++) {
-            if (game.getBoardManager().getAtCoordinates(i, (n - 1) - i) != playerType)
-                break;
-            if (i == n - 1) {
-                for (int j = 0; j < n; j++) {
-                    winnerPoints.add(new Point(j, (n - 1) - j));
-                }
-                return Parameters.GAME_RESULT_FINISHED;
-            }
-        }
-        //check draw
-        if (game.getBoardManager().isFull()) {
+        if (checkColumn(x, playerType, n))
+            return Parameters.GAME_RESULT_FINISHED;
+        else if (checkRow(y, playerType, n))
+            return Parameters.GAME_RESULT_FINISHED;
+        else if (checkDiagonal(x, y, playerType, n))
+            return Parameters.GAME_RESULT_FINISHED;
+        else if (checkAntiDiagonal(x, y, playerType, n))
+            return Parameters.GAME_RESULT_FINISHED;
+        else if (game.getBoardManager().isFull())
             return Parameters.GAME_RESULT_DRAW;
-        }
+
 
         return Parameters.GAME_RESULT_NOT_FINISHED;
     }
@@ -138,7 +98,7 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
     /**
      * Return number defines what to draw on a board in TicTacToeGame class
      *
-     * @param point        Point clicked on board
+     * @param point Point clicked on board
      * @return
      */
     @Override
@@ -146,7 +106,7 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
         Log.d(TAG, "onBoardClick()");
         int result = Parameters.CLICK_RESULT_MOVE_NOT_POSSIBLE;
         // check if game is in progress
-        if(isGameInProgress) {
+        if (isGameInProgress) {
             // get player whose turn is in progress
             Player currentPlayer = game.getPlayerManager().currentPlayer();
             // check if this move is possible
@@ -156,13 +116,17 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                 // if move is possible, notify output to draw player icon
                 game.getOutputProvider().drawOnBoard(point.x, point.y, currentPlayer.getBoardDrawableResource());
                 // check if this move was winning move.
-                int gameResult = checkEndOfGame(point.x, point.y, numberOfCellsToWin,  currentPlayer.getPlayerType());
+                int gameResult = checkEndOfGame(point.x, point.y, numberOfCellsToWin, currentPlayer.getPlayerType());
                 if (gameResult == Parameters.GAME_RESULT_FINISHED) {
                     game.getOutputProvider().displayWinnerCells(winnerPoints);
+                    for (int i = 0; i < winnerPoints.size(); i++) {
+                        Log.i("winner", "winner points" + String.valueOf(winnerPoints.get(i)));
+                    }
                     isGameInProgress = false;
                     result = Parameters.CLICK_RESULT_MOVE_OK;
                     Log.d(TAG, "onBoardClick() : GAME FINISHED");
                 } else if (gameResult == Parameters.GAME_RESULT_DRAW) {
+                    winnerPoints.clear();
                     game.getOutputProvider().displayWinnerCells(winnerPoints);
                     game.getOutputProvider().displayMessage("Draw!");
                     isGameInProgress = false;
@@ -190,12 +154,104 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
     }
 
     private int getWinConditions(int boardSize) {
-        return boardSize;
+
+        if (boardSize == 3 || boardSize == 4)
+            return 3;
+        else if (boardSize == 5)
+            return 4;
+        else return 5;
     }
 
     public int getNumberOfCellsToWin() {
         return this.numberOfCellsToWin;
     }
 
+    private boolean checkColumn(int x, int playerType, int boardSize) {
+        int counter = 0;
 
+        for (int i = 0; i < boardSize; i++) {
+            if (game.getBoardManager().getAtCoordinates(x, i) == playerType) {
+                counter++;
+                winnerPoints.add(new Point(x, i));
+                if (counter == numberOfCellsToWin)
+                    return true;
+            } else {
+                counter = 0;
+                winnerPoints.clear();
+            }
+        }
+        return false;
+    }
+
+    private boolean checkRow(int y, int playerType, int boardSize) {
+        int counter = 0;
+
+        for (int i = 0; i < boardSize; i++) {
+            if (game.getBoardManager().getAtCoordinates(i, y) == playerType) {
+                counter++;
+                winnerPoints.add(new Point(i, y));
+
+                if (counter == numberOfCellsToWin)
+                    return true;
+            } else {
+                counter = 0;
+                winnerPoints.clear();
+            }
+        }
+        return false;
+    }
+
+    private boolean checkDiagonal(int x, int y, int playerType, int boardSize) {
+        int counter = 0;
+
+        int k = x;
+        int m = y;
+
+        while (k > 0 && m > 0) {
+            k--;
+            m--;
+        }
+
+        for (int i = k; i < boardSize; i++) {
+            if (game.getBoardManager().getAtCoordinates(i, m) == playerType) {
+                counter++;
+                winnerPoints.add(new Point(i, m));
+                if (counter == numberOfCellsToWin)
+                    return true;
+            } else {
+                counter = 0;
+                winnerPoints.clear();
+            }
+            if (m < boardSize - 1)
+                m++;
+        }
+        return false;
+    }
+
+    private boolean checkAntiDiagonal(int x, int y, int playerType, int boardSize) {
+        int counter = 0;
+
+        int k = x;
+        int m = y;
+
+        while (k > 0 && m < boardSize - 1) {
+            k--;
+            m++;
+        }
+
+        for (int i = k; i < boardSize; i++) {
+            if (game.getBoardManager().getAtCoordinates(i, m) == playerType) {
+                counter++;
+                winnerPoints.add(new Point(i, m));
+                if (counter == numberOfCellsToWin)
+                    return true;
+            } else {
+                counter = 0;
+                winnerPoints.clear();
+            }
+            if (m > 0)
+                m--;
+        }
+        return false;
+    }
 }
