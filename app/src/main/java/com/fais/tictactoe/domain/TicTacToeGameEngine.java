@@ -119,9 +119,9 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                 int gameResult = checkEndOfGame(point.x, point.y, numberOfCellsToWin, currentPlayer.getPlayerType());
                 if (gameResult == Parameters.GAME_RESULT_FINISHED) {
                     game.getOutputProvider().displayWinnerCells(winnerPoints);
-                    for (int i = 0; i < winnerPoints.size(); i++) {
-                        Log.i("winner", "winner points" + String.valueOf(winnerPoints.get(i)));
-                    }
+                    //for (int i = 0; i < winnerPoints.size(); i++) {
+                    //    Log.i("winner", "winner points" + String.valueOf(winnerPoints.get(i)) + "playerType" + currentPlayer.getPlayerType());
+                    //}
                     isGameInProgress = false;
                     result = Parameters.CLICK_RESULT_MOVE_OK;
                     Log.d(TAG, "onBoardClick() : GAME FINISHED");
@@ -168,18 +168,22 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
 
     private boolean checkColumn(int x, int playerType, int boardSize) {
         int counter = 0;
-
+        winnerPoints.clear();
         for (int i = 0; i < boardSize; i++) {
             if (game.getBoardManager().getAtCoordinates(x, i) == playerType) {
+                //Log.i("column", "x: " + x + " y: " + i + " == " + playerType);
                 counter++;
                 winnerPoints.add(new Point(x, i));
-                if (counter == numberOfCellsToWin)
+                if (counter == numberOfCellsToWin) {
+                    //Log.i("number of cells", "counter == " + counter + " number of cells == " + numberOfCellsToWin);
                     return true;
+                }
             } else {
                 counter = 0;
                 winnerPoints.clear();
             }
         }
+        winnerPoints.clear();
         return false;
     }
 
@@ -190,14 +194,18 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             if (game.getBoardManager().getAtCoordinates(i, y) == playerType) {
                 counter++;
                 winnerPoints.add(new Point(i, y));
+                //Log.i("row", "x: " + i + " y: " + y + " == " + playerType);
 
-                if (counter == numberOfCellsToWin)
+                if (counter == numberOfCellsToWin) {
+                    //Log.i("number of cells", "counter == " + counter + "  number of cells == " + numberOfCellsToWin);
                     return true;
+                }
             } else {
                 counter = 0;
                 winnerPoints.clear();
             }
         }
+        winnerPoints.clear();
         return false;
     }
 
@@ -216,8 +224,11 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             if (game.getBoardManager().getAtCoordinates(i, m) == playerType) {
                 counter++;
                 winnerPoints.add(new Point(i, m));
-                if (counter == numberOfCellsToWin)
+                //Log.i("diagonal", "x: " + i + " y: " + m + " == " + playerType);
+                if (counter == numberOfCellsToWin) {
+                    //Log.i("number of cells", "counter == " + counter + "  number of cells == " + numberOfCellsToWin);
                     return true;
+                }
             } else {
                 counter = 0;
                 winnerPoints.clear();
@@ -225,6 +236,7 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             if (m < boardSize - 1)
                 m++;
         }
+        winnerPoints.clear();
         return false;
     }
 
@@ -243,8 +255,11 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             if (game.getBoardManager().getAtCoordinates(i, m) == playerType) {
                 counter++;
                 winnerPoints.add(new Point(i, m));
-                if (counter == numberOfCellsToWin)
+                //Log.i("antidiagonal", "x: " + i + " y: " + m + " == " + playerType);
+                if (counter == numberOfCellsToWin) {
+                    //Log.i("number of cells", "counter == " + counter + "  number of cells == " + numberOfCellsToWin);
                     return true;
+                }
             } else {
                 counter = 0;
                 winnerPoints.clear();
@@ -252,6 +267,7 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             if (m > 0)
                 m--;
         }
+        winnerPoints.clear();
         return false;
     }
 }
