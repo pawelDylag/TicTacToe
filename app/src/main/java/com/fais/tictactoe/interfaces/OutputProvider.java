@@ -9,8 +9,6 @@ import java.util.ArrayList;
  */
 public interface OutputProvider {
 
-
-
     void drawOnBoard(int x, int y, int resource);
 
     void displayMessage(String message);

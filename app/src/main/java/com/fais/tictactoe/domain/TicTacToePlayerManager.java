@@ -34,33 +34,6 @@ public class TicTacToePlayerManager implements PlayerManager{
         this.setInitialPlayer();
     }
 
-    @Override
-    public Player getPlayer(int playerType)
-    {
-        if(firstPlayer.getPlayerType()==playerType)
-        {
-            return firstPlayer;
-        }
-        else if(secondPlayer.getPlayerType()==playerType)
-        {
-            return secondPlayer;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    @Override
-    public Player getFirstPlayer() {
-        return firstPlayer;
-    }
-
-    @Override
-    public Player getSecondPlayer() {
-        return secondPlayer;
-    }
-
     /**
      * Sets first player
      *
