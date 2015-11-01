@@ -119,9 +119,9 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
                 int gameResult = checkEndOfGame(point.x, point.y, numberOfCellsToWin, currentPlayer.getPlayerType());
                 if (gameResult == Parameters.GAME_RESULT_FINISHED) {
                     game.getOutputProvider().displayWinnerCells(winnerPoints);
-                    //for (int i = 0; i < winnerPoints.size(); i++) {
-                    //    Log.i("winner", "winner points" + String.valueOf(winnerPoints.get(i)) + "playerType" + currentPlayer.getPlayerType());
-                    //}
+                    for (int i = 0; i < winnerPoints.size(); i++) {
+                        Log.i("winner", "winner points" + String.valueOf(winnerPoints.get(i)) + "playerType" + currentPlayer.getPlayerType());
+                    }
                     isGameInProgress = false;
                     result = Parameters.CLICK_RESULT_MOVE_OK;
                     Log.d(TAG, "onBoardClick() : GAME FINISHED");
@@ -235,6 +235,10 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             }
             if (m < boardSize - 1)
                 m++;
+            else{
+                winnerPoints.clear();
+                return false;
+            }
         }
         winnerPoints.clear();
         return false;
@@ -250,6 +254,7 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             k--;
             m++;
         }
+        //Log.i("before FOR", "x: " + k + " y: " + m);
 
         for (int i = k; i < boardSize; i++) {
             if (game.getBoardManager().getAtCoordinates(i, m) == playerType) {
@@ -266,6 +271,10 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
             }
             if (m > 0)
                 m--;
+            else {
+                winnerPoints.clear();
+                return false;
+            }
         }
         winnerPoints.clear();
         return false;
