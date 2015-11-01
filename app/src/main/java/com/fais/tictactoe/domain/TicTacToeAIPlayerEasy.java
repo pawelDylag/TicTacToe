@@ -6,15 +6,23 @@ import android.util.Log;
 
 import com.fais.tictactoe.Data.Player;
 
+import java.util.Random;
+
 /**
  * Created by Shevson on 2015-10-25.
  */
 public class TicTacToeAIPlayerEasy extends Player
 {
     private TicTacToeGame game;
+    private boolean firstMove;
+    private int howManyOccupied;
+    private boolean myfirstmove = false;
 
-    public TicTacToeAIPlayerEasy(TicTacToeGame game) {
+    public TicTacToeAIPlayerEasy(TicTacToeGame game)
+    {
         this.game = game;
+        firstMove = true;
+        howManyOccupied = 0;
     }
 
     @Override
@@ -29,9 +37,17 @@ public class TicTacToeAIPlayerEasy extends Player
         int winNr;
         private int boardsize;
         private boolean madeMove = false;
+        // Koordynaty do wykonania ruchu
         private int xcoord;
         private int ycoord;
+        // INT mojego przeciwnika
         private int myOpponent;
+        // Koordynaty jesli trzeba postawic cos pomiedzy do wygrania
+        private int betweenX;
+        private int betweenY;
+        // Zliczanie ile jest "szpar"
+        private int betweenMarks;
+        // Zliczanie ile jest postawionych znakow w rzedzie/kolumnie/po skosie
         int myInRow = 0;
         int myInDiag = 0;
 
@@ -46,8 +62,21 @@ public class TicTacToeAIPlayerEasy extends Player
         }
 
         @Override
-        protected Void doInBackground(Void... arg0) {
-            checkPotentialWinningMoves();
+        protected Void doInBackground(Void... arg0)
+        {
+            howManyOccupied += 2;
+            if(!myfirstmove)
+            {
+                checkFirstMove();
+            }
+            if(!madeMove)
+            {
+                checkPotentialWinningMoves();
+            }
+            if(!madeMove)
+            {
+                checkPotentialOpponentMoves();
+            }
             if(!madeMove)
             {
                 checkMoves();
@@ -61,6 +90,58 @@ public class TicTacToeAIPlayerEasy extends Player
             game.getGameEngine().onBoardClick(new Point(xcoord, ycoord));
         }
 
+        // Sprawdza, kto pierwszy sie rusza
+        private void checkFirstMove()
+        {
+            boolean opponentFirst = false;
+            int firstX = 0,firstY = 0;
+            for(int x = 0; x<boardsize; x++)
+            {
+                for (int y = 0; y < boardsize; y++)
+                {
+                    if(game.getBoardManager().getAtCoordinates(x,y)!=0)
+                    {
+                        opponentFirst = true;
+                        firstX = x;
+                        firstY = y;
+                    }
+                }
+            }
+            if(opponentFirst)
+            {
+                System.out.println("OPPONENT WENT FIRST, I COUNTER!");
+                System.out.println("OPPONENT POSITION: "+firstX+","+firstY);
+                if((firstX+1)>=boardsize)
+                {
+                    xcoord = firstX - 1;
+                }
+                else
+                {
+                    xcoord = firstX + 1;
+                }
+                if((firstY+1)>=boardsize)
+                {
+                    ycoord = firstY - 1;
+                }
+                else
+                {
+                    ycoord = firstY + 1;
+                }
+                System.out.println("X: "+xcoord+" Y: "+ycoord);
+                madeMove = true;
+            }
+            else
+            {
+                System.out.println("Random MOVE I GO FIRST!");
+                Random moveGenerator = new Random();
+                xcoord = moveGenerator.nextInt(boardsize-1);
+                ycoord = moveGenerator.nextInt(boardsize-1);
+                madeMove = true;
+            }
+            // Pierwszy ruch wykoanny, mamy to z glowy!
+            myfirstmove = true;
+        }
+
         // Sprawdza ruchy, ktore moga nam dac zwyciestwo
         private void checkPotentialWinningMoves()
         {
@@ -70,7 +151,6 @@ public class TicTacToeAIPlayerEasy extends Player
                 {
                     if(game.getBoardManager().getAtCoordinates(x, y)==playerType)
                     {
-                        System.out.println("Trafilem na swoj na polu: "+x+";"+y);
                         canIWinXRow(x, y, playerType);
                         if(!madeMove)
                         {
@@ -100,7 +180,6 @@ public class TicTacToeAIPlayerEasy extends Player
                     if(game.getBoardManager().getAtCoordinates(x, y)!=playerType && game.getBoardManager().getAtCoordinates(x, y)!=0)
                     {
                         myOpponent = game.getBoardManager().getAtCoordinates(x, y);
-                        System.out.println("Trafilem na przeciwnika na polu: "+x+";"+y);
                         canIWinXRow(x, y, myOpponent);
                         if(!madeMove)
                         {
@@ -123,22 +202,42 @@ public class TicTacToeAIPlayerEasy extends Player
         // Sprawdza dowolne miejsce, gdzie moze zagrac
         private void checkMoves()
         {
-            for(int x = 0; x<boardsize; x++)
+            Random moveGenerator = new Random();
+            int x1, y1;
+            if(howManyOccupied<((boardsize*boardsize)/2) && firstMove==false)
             {
-                for(int y = 0; y<boardsize; y++)
+                while(!madeMove)
                 {
-                    if(game.getBoardManager().getAtCoordinates(x, y)==0)
+                    x1 = moveGenerator.nextInt(boardsize-1);
+                    y1 = moveGenerator.nextInt(boardsize-1);
+                    if(game.getBoardManager().getAtCoordinates(x1, y1)==0)
                     {
-                        xcoord = x;
-                        ycoord = y;
+                        xcoord = x1;
+                        ycoord = y1;
                         madeMove = true;
                         break;
                     }
-                    if(madeMove) break;
                 }
-                if(madeMove)
+            }
+            else
+            {
+                for(int x = 0; x<boardsize; x++)
                 {
-                    break;
+                    for(int y = 0; y<boardsize; y++)
+                    {
+                        if(game.getBoardManager().getAtCoordinates(x, y)==0)
+                        {
+                            xcoord = x;
+                            ycoord = y;
+                            madeMove = true;
+                            firstMove = false;
+                        }
+                        if(madeMove) break;
+                    }
+                    if(madeMove)
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -147,124 +246,90 @@ public class TicTacToeAIPlayerEasy extends Player
         private void canIWinXRow(int x, int y, int which)
         {
             int a;
-            if(boardsize-x>=winNr)
+            for (a = 0; a < boardsize; a++)
             {
-                for (a = x; a < boardsize; a++)
+                if (game.getBoardManager().getAtCoordinates(a, y) == which)
                 {
-                    if (game.getBoardManager().getAtCoordinates(a, y) == which)
-                    {
-                        myInRow++;
-                    }
-                    else
-                    {
-                        if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(a, y)==0)
-                        {
-                            xcoord = a;
-                            ycoord = y;
-                            madeMove = true;
-                            break;
-                        }
-                        break;
-                    }
+                    myInRow++;
+                }
+                else if(game.getBoardManager().getAtCoordinates(a,y)==0  && betweenMarks<1)
+                {
+                    betweenX = a;
+                    betweenY = y;
+                    betweenMarks++;
                 }
                 if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(a, y)==0)
                 {
                     xcoord = a;
                     ycoord = y;
                     madeMove = true;
+                    break;
                 }
-                myInRow = 0;
+            }
+            a--;
+            if(betweenMarks>0 && myInRow == winNr-1)
+            {
+                xcoord = betweenX;
+                ycoord = betweenY;
+                madeMove = true;
+                betweenMarks = 0;
             }
             else
             {
-                for (a = x; a >= 0; a--)
-                {
-                    if (game.getBoardManager().getAtCoordinates(a, y) == which)
-                    {
-                        myInRow++;
-                    }
-                    else
-                    {
-                        if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(a, y)==0)
-                        {
-                            xcoord = a;
-                            ycoord = y;
-                            madeMove = true;
-                            break;
-                        }
-                        break;
-                    }
-                }
-                if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(a + 1, y)==0)
-                {
-                    xcoord = a;
-                    ycoord = y;
-                    madeMove = true;
-                }
-                myInRow = 0;
+                betweenMarks = 0;
             }
+            if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(a, y)==0 && madeMove==false)
+            {
+                xcoord = a;
+                ycoord = y;
+                madeMove = true;
+            }
+            myInRow = 0;
         }
 
         // Sprawdza mozliwosc wygranej po Y-ach
         private void canIWinYRow(int x, int y, int which)
         {
             int a;
-            if(boardsize-y>=winNr)
+            for (a = 0; a < boardsize; a++)
             {
-                for (a = y; a < boardsize; a++)
+                if (game.getBoardManager().getAtCoordinates(x, a) == which)
                 {
-                    if (game.getBoardManager().getAtCoordinates(x, a) == which)
-                    {
-                        myInRow++;
-                    }
-                    else
-                    {
-                        if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(x, a)==0)
-                        {
-                            xcoord = x;
-                            ycoord = a;
-                            madeMove = true;
-                            break;
-                        }
-                        break;
-                    }
+                    myInRow++;
+                }
+                else if(game.getBoardManager().getAtCoordinates(x,a)==0  && betweenMarks<1)
+                {
+                    betweenX = x;
+                    betweenY = a;
+                    betweenMarks++;
                 }
                 if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(x, a)==0)
                 {
                     xcoord = x;
                     ycoord = a;
                     madeMove = true;
+                    break;
                 }
-                myInRow = 0;
+            }
+            a--;
+            if(betweenMarks>0 && myInRow == winNr-1)
+            {
+                xcoord = betweenX;
+                ycoord = betweenY;
+                madeMove = true;
+                betweenMarks = 0;
             }
             else
             {
-                for (a = y; a >= 0; a--)
-                {
-                    if (game.getBoardManager().getAtCoordinates(x, a) == which)
-                    {
-                        myInRow++;
-                    }
-                    else
-                    {
-                        if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(x, a)==0)
-                        {
-                            xcoord = x;
-                            ycoord = a;
-                            madeMove = true;
-                            break;
-                        }
-                        break;
-                    }
-                }
-                if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(x, a + 1)==0)
-                {
-                    xcoord = x;
-                    ycoord = a;
-                    madeMove = true;
-                }
-                myInRow = 0;
+                betweenMarks = 0;
             }
+            if (myInRow == winNr-1 && game.getBoardManager().getAtCoordinates(x, a)==0 && madeMove==false)
+            {
+                xcoord = x;
+                ycoord = a;
+                madeMove = true;
+            }
+            myInRow = 0;
         }
 
         // Sprawdza mozliwosc wygranej po diagonali
@@ -281,10 +346,27 @@ public class TicTacToeAIPlayerEasy extends Player
                 {
                     myInDiag++;
                 }
+                else if((game.getBoardManager().getAtCoordinates(a, b)==0)  && betweenMarks<1)
+                {
+                    betweenMarks++;
+                    betweenX = a;
+                    betweenY = b;
+                }
                 a++;
                 b++;
             }
-            if(myInDiag == winNr-1 && game.getBoardManager().getAtCoordinates(a - 1, b - 1)==0)
+            if(betweenMarks>0 && myInDiag == winNr-1)
+            {
+                xcoord = betweenX;
+                ycoord = betweenY;
+                madeMove = true;
+                betweenMarks = 0;
+            }
+            else
+            {
+                betweenMarks = 0;
+            }
+            if(myInDiag == winNr-1 && game.getBoardManager().getAtCoordinates(a - 1, b - 1)==0 && madeMove==false)
             {
                 xcoord = a-1;
                 ycoord = b-1;
@@ -301,10 +383,27 @@ public class TicTacToeAIPlayerEasy extends Player
                     {
                         myInDiag++;
                     }
+                    else if((game.getBoardManager().getAtCoordinates(a, b)==0)  && betweenMarks<1)
+                    {
+                        betweenMarks++;
+                        betweenX = a;
+                        betweenY = b;
+                    }
                     a++;
                     b--;
                 }
-                if(myInDiag == winNr-1 && game.getBoardManager().getAtCoordinates(a - 1, b + 1)==0)
+                if(betweenMarks>0 && myInDiag == winNr-1)
+                {
+                    xcoord = betweenX;
+                    ycoord = betweenY;
+                    madeMove = true;
+                    betweenMarks = 0;
+                }
+                else
+                {
+                    betweenMarks = 0;
+                }
+                if(myInDiag == winNr-1 && game.getBoardManager().getAtCoordinates(a - 1, b + 1)==0 && madeMove==false)
                 {
                     xcoord = a-1;
                     ycoord = b+1;
@@ -316,19 +415,36 @@ public class TicTacToeAIPlayerEasy extends Player
             //Petla a-- b++
             if(!madeMove)
             {
-                while(a>=0 && b<boardsize)
+                while (a >= 0 && b < boardsize)
                 {
-                    if(game.getBoardManager().getAtCoordinates(a, b)==which)
+                    if (game.getBoardManager().getAtCoordinates(a, b) == which)
                     {
                         myInDiag++;
+                    }
+                    else if ((game.getBoardManager().getAtCoordinates(a, b) == 0)  && betweenMarks<1)
+                    {
+                        betweenMarks++;
+                        betweenX = a;
+                        betweenY = b;
                     }
                     a--;
                     b++;
                 }
-                if(myInDiag == winNr-1 && game.getBoardManager().getAtCoordinates(a + 1, b - 1)==0)
+                if (betweenMarks>0 && myInDiag == winNr - 1)
                 {
-                    xcoord = a+1;
-                    ycoord = b-1;
+                    xcoord = betweenX;
+                    ycoord = betweenY;
+                    madeMove = true;
+                    betweenMarks = 0;
+                }
+                else
+                {
+                    betweenMarks = 0;
+                }
+                if (myInDiag == winNr - 1 && game.getBoardManager().getAtCoordinates(a + 1, b - 1) == 0 && madeMove==false)
+                {
+                    xcoord = a + 1;
+                    ycoord = b - 1;
                     madeMove = true;
                 }
             }
@@ -343,15 +459,32 @@ public class TicTacToeAIPlayerEasy extends Player
                     {
                         myInDiag++;
                     }
+                    else if((game.getBoardManager().getAtCoordinates(a, b)==0) && betweenMarks<1)
+                    {
+                        betweenMarks++;
+                        betweenX = a;
+                        betweenY = b;
+                    }
                     a--;
                     b--;
                 }
-            }
-            if(myInDiag == winNr-1 && game.getBoardManager().getAtCoordinates(a+1,b+1)==0)
-            {
-                xcoord = a+1;
-                ycoord = b+1;
-                madeMove = true;
+                if(betweenMarks>0 && myInDiag == winNr-1)
+                {
+                    xcoord = betweenX;
+                    ycoord = betweenY;
+                    madeMove = true;
+                    betweenMarks = 0;
+                }
+                else
+                {
+                    betweenMarks = 0;
+                }
+                if(myInDiag == winNr-1 && game.getBoardManager().getAtCoordinates(a+1,b+1)==0 && madeMove==false)
+                {
+                    xcoord = a+1;
+                    ycoord = b+1;
+                    madeMove = true;
+                }
             }
             myInDiag = 0;
         }
