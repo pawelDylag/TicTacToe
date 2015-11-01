@@ -7,12 +7,6 @@ import com.fais.tictactoe.Data.Player;
  */
 public interface PlayerManager
 {
-    // zwraca obiekt Player dla podanego typu
-    Player getPlayer(int playerType);
-
-    Player getFirstPlayer();
-
-    Player getSecondPlayer();
 
     // pobiera kolejnego graca w turze
     void nextTurn();

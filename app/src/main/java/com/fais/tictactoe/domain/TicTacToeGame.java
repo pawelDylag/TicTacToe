@@ -28,8 +28,11 @@ public class TicTacToeGame {
     private int boardSize;
 
     public TicTacToeGame(int firstPlayer, int secondPlayer, int boardSize, OutputProvider outputProvider) {
+        // set boardsize
         this.boardSize = boardSize;
+        // init board manager
         this.boardManager = new TicTacToeBoardManager(boardSize);
+        // set output provider
         this.outputProvider = outputProvider;
         // create player objects
         PlayerFactory playerFactory = new PlayerFactory();
