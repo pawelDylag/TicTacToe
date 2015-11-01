@@ -109,8 +109,6 @@ public class TicTacToeAIPlayerEasy extends Player
             }
             if(opponentFirst)
             {
-                System.out.println("OPPONENT WENT FIRST, I COUNTER!");
-                System.out.println("OPPONENT POSITION: "+firstX+","+firstY);
                 if((firstX+1)>=boardsize)
                 {
                     xcoord = firstX - 1;
@@ -127,12 +125,10 @@ public class TicTacToeAIPlayerEasy extends Player
                 {
                     ycoord = firstY + 1;
                 }
-                System.out.println("X: "+xcoord+" Y: "+ycoord);
                 madeMove = true;
             }
             else
             {
-                System.out.println("Random MOVE I GO FIRST!");
                 Random moveGenerator = new Random();
                 xcoord = moveGenerator.nextInt(boardsize-1);
                 ycoord = moveGenerator.nextInt(boardsize-1);

@@ -155,9 +155,9 @@ public class TicTacToeGameEngine implements com.fais.tictactoe.interfaces.GameEn
 
     private int getWinConditions(int boardSize) {
 
-        if (boardSize == 3 || boardSize == 4)
+        if (boardSize == 3)
             return 3;
-        else if (boardSize == 5)
+        else if (boardSize == 4 || boardSize == 5)
             return 4;
         else return 5;
     }
